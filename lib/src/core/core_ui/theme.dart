@@ -29,8 +29,9 @@ class AppTheme {
       secondary: AppColors.accentTerracotta,
       onSecondary: AppColors.textDark,
 
-      surface: AppColors.backgroundBeige, // Color principal para fondos y componentes
-      onSurface: AppColors.textDark,      // Color principal para texto e iconos
+  // Superficies y fondos: usar blanco/near-white para buena legibilidad
+  surface: Color(0xFFF7F7F7),
+  onSurface: Color(0xFF212121),
 
       // Color de errores
       error: AppColors.primaryRed,
@@ -48,6 +49,10 @@ class AppTheme {
         bodyColor: lightColorScheme.onSurface,
         displayColor: lightColorScheme.onSurface,
       ),
+
+  // Fondo y superficie principales: usar surface para evitar API deprecated
+  scaffoldBackgroundColor: lightColorScheme.surface,
+  canvasColor: lightColorScheme.surface,
 
       // Tema de AppBar
       appBarTheme: AppBarTheme(
@@ -92,14 +97,15 @@ class AppTheme {
       // Tema de inputs
       inputDecorationTheme: InputDecorationTheme(
         filled: true,
-        fillColor: AppColors.white,
+        // ligero gris para inputs en light para separarlos del fondo beige
+        fillColor: const Color(0xFFF2F2F3),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(8),
           borderSide: BorderSide(color: lightColorScheme.primary),
         ),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(8),
-          borderSide: BorderSide(color: AppColors.grey.withAlpha((0.3 * 255).round())),
+          borderSide: BorderSide(color: AppColors.grey.withAlpha((0.35 * 255).round())),
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(8),
@@ -131,9 +137,9 @@ class AppTheme {
       secondary: AppColors.accentTerracotta,
       onSecondary: AppColors.white,
 
-      // Usamos un gris oscuro pero no completamente negro para mejorar contraste
-      surface: Color(0xFF151515),
-      onSurface: AppColors.white,
+  // Superficies en oscuro: mantener contraste pero evitar negro absoluto
+  surface: Color(0xFF0B0B0B),
+  onSurface: Color(0xFFF2F2F2),
 
       error: AppColors.primaryRed,
       onError: AppColors.white,
@@ -155,16 +161,16 @@ class AppTheme {
         elevation: 0,
       ),
 
-      // Fondo general de la aplicación en modo oscuro (mejor que negro absoluto)
-      scaffoldBackgroundColor: const Color(0xFF0F0F0F),
-      // Color para elementos flotantes y barras
-      canvasColor: const Color(0xFF0F0F0F),
+  // Fondo general de la aplicación en modo oscuro (usar surface en lugar de background)
+  scaffoldBackgroundColor: darkColorScheme.surface,
+  // Color para elementos flotantes y barras
+  canvasColor: darkColorScheme.surface,
 
-      // Asegurar que los iconos sean visibles
-      iconTheme: IconThemeData(color: darkColorScheme.onSurface),
+  // Asegurar que los iconos sean visibles
+  iconTheme: IconThemeData(color: darkColorScheme.onSurface),
 
-      // Separadores y divisores ligeramente visibles
-      dividerColor: Colors.grey.shade800,
+  // Separadores y divisores ligeramente visibles
+  dividerColor: const Color(0xFF2B2B2B),
 
       // Botones en modo oscuro: darles el color primario para mejor contraste
       filledButtonTheme: FilledButtonThemeData(
@@ -185,7 +191,7 @@ class AppTheme {
 
       // Tarjetas ligeramente más claras que el fondo para destacarse
       cardTheme: CardThemeData(
-        color: const Color(0xFF222222),
+        color: const Color(0xFF1E1E1E),
         elevation: 2,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(12),
@@ -195,14 +201,14 @@ class AppTheme {
       // Inputs en oscuro: fondo tenue y bordes suaves
       inputDecorationTheme: InputDecorationTheme(
         filled: true,
-        fillColor: const Color(0xFF1B1B1B),
+        fillColor: const Color(0xFF151515),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(8),
           borderSide: BorderSide(color: darkColorScheme.primary),
         ),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(8),
-          borderSide: BorderSide(color: AppColors.grey.withAlpha((0.3 * 255).round())),
+          borderSide: BorderSide(color: AppColors.grey.withAlpha((0.32 * 255).round())),
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(8),

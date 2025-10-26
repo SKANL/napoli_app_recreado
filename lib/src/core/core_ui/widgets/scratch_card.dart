@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../theme.dart';
 import 'dart:ui' as ui;
 import 'dart:math' as math;
 import 'package:audioplayers/audioplayers.dart';
@@ -197,16 +198,8 @@ class _ScratchCardState extends State<ScratchCard> with SingleTickerProviderStat
                         ),
                         child: Container(
                           decoration: BoxDecoration(
-                            gradient: LinearGradient(
-                              colors: [
-                                    theme.colorScheme.onSurface.withAlpha((0.12 * 255).round()),
-                                    theme.colorScheme.onSurface.withAlpha((0.08 * 255).round()),
-                                    theme.colorScheme.onSurface.withAlpha((0.12 * 255).round()),
-                                  ],
-                              begin: Alignment.topLeft,
-                              end: Alignment.bottomRight,
-                              stops: const [0.0, 0.5, 1.0],
-                            ),
+                            // Usar un gris sólido para la capa superior (legibilidad y consistencia)
+                            color: AppColors.grey,
                           ),
                           child: Stack(
                             children: [
