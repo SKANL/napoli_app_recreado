@@ -25,6 +25,7 @@ flutter:
   assets:
     - assets/images/
     - assets/animation/
+    - assets/image-products/
   fonts:
     - family: Avenir
       fonts:

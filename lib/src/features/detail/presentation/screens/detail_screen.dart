@@ -31,7 +31,7 @@ class _DetailScreenState extends State<DetailScreen> {
               name: 'Pizza Name',
               category: 'Category',
               price: 199,
-              image: 'assets/images/flamenco-waiting.png',
+              image: 'assets/image-products/pizza.png',
             ),
           );
   }
@@ -65,8 +65,8 @@ class _DetailScreenState extends State<DetailScreen> {
                     height: 240,
                     child: SafeImage(
                       assetPath:
-                          product?.image ??
-                          'assets/images/flamenco-waiting.png',
+                product?.image ??
+                  'assets/image-products/pizza.png',
                       fit: BoxFit.contain,
                     ),
                   ),
@@ -157,7 +157,7 @@ class _DetailScreenState extends State<DetailScreen> {
             CartItem(
               id: id,
               name: product?.name ?? 'Pizza',
-              image: product?.image ?? 'assets/images/flamenco-waiting.png',
+                      image: product?.image ?? 'assets/image-products/pizza.png',
               price: product?.price ?? 199,
               size: 'M',
             ),

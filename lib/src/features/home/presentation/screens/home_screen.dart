@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:napoli_app_v1/src/core/core_ui/widgets/app_scaffold.dart';
 import 'package:napoli_app_v1/src/core/core_ui/widgets/product_card.dart';
+import 'package:napoli_app_v1/src/core/core_ui/widgets/product_list_item.dart';
 import 'package:napoli_app_v1/src/core/core_ui/widgets/header.dart';
 import 'package:napoli_app_v1/src/core/core_ui/widgets/footer.dart';
 import 'package:napoli_app_v1/src/features/detail/presentation/screens/detail_screen.dart';
@@ -43,7 +44,7 @@ class HomeScreen extends StatelessWidget {
                       final p = items[index];
                       return GestureDetector(
                         onTap: () => Navigator.of(context).push(MaterialPageRoute(builder: (_) => DetailScreen(productId: p.id))),
-                        child: ProductCard(title: p.name, category: p.category, price: '\$${p.price}', onTap: () => Navigator.of(context).push(MaterialPageRoute(builder: (_) => DetailScreen(productId: p.id)))),
+                        child: ProductCard(title: p.name, category: p.category, price: '\$${p.price}', imagePath: p.image, onTap: () => Navigator.of(context).push(MaterialPageRoute(builder: (_) => DetailScreen(productId: p.id)))),
                       );
                     },
                   );
@@ -64,11 +65,11 @@ class HomeScreen extends StatelessWidget {
                     itemCount: items.length,
                     itemBuilder: (context, index) {
                       final p = items[index];
-                      return ListTile(
-                        leading: const CircleAvatar(child: FlutterLogo()),
-                        title: Text(p.name),
-                        subtitle: Text(p.category),
-                        trailing: Text('\$${p.price} MXN'),
+                      return ProductListItem(
+                        imagePath: p.image,
+                        title: p.name,
+                        subtitle: p.category,
+                        price: '\$${p.price} MXN',
                         onTap: () => Navigator.of(context).push(MaterialPageRoute(builder: (_) => DetailScreen(productId: p.id))),
                       );
                     },

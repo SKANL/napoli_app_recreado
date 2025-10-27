@@ -9,7 +9,7 @@ class MockProductRepository implements ProductRepository {
       name: 'Pizza #$i',
       category: i % 2 == 0 ? 'Veg' : 'Non-Veg',
       price: 99 + i * 20,
-      image: 'assets/images/flamenco-waiting.png',
+      image: 'assets/image-products/pizza.png',
     ),
   );
 

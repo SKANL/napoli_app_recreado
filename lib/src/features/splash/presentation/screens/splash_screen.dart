@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:napoli_app_v1/src/features/home/presentation/screens/home_screen.dart';
+import 'package:napoli_app_v1/src/features/auth/presentation/screens/login_screen.dart';
 import 'package:napoli_app_v1/src/core/core_ui/theme.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -14,11 +16,19 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     super.initState();
-    Future.delayed(const Duration(seconds: 3), () {
+    _checkLoginAndNavigate();
+  }
+
+  Future<void> _checkLoginAndNavigate() async {
+    await Future.delayed(const Duration(seconds: 2));
+    final prefs = await SharedPreferences.getInstance();
+    final loggedIn = prefs.getBool('is_logged_in') ?? false;
+    if (!mounted) return;
+
+    final route = MaterialPageRoute(builder: (_) => loggedIn ? const HomeScreen() : const LoginScreen());
+    WidgetsBinding.instance.addPostFrameCallback((_) {
       if (!mounted) return;
-      Navigator.of(context).pushReplacement(
-        MaterialPageRoute(builder: (_) => const HomeScreen()),
-      );
+      Navigator.of(context).pushReplacement(route);
     });
   }
 

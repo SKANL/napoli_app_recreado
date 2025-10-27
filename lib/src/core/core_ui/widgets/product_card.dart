@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:napoli_app_v1/src/core/core_ui/widgets/safe_image.dart';
 
 class ProductCard extends StatelessWidget {
   final String title;
   final String category;
   final String price;
+  final String? imagePath;
   final void Function()? onTap;
-  const ProductCard({super.key, required this.title, required this.category, required this.price, this.onTap});
+  const ProductCard({super.key, required this.title, required this.category, required this.price, this.imagePath, this.onTap});
 
   @override
   Widget build(BuildContext context) {
@@ -19,7 +21,11 @@ class ProductCard extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              const FlutterLogo(size: 90),
+              // Use SafeImage if an image path is provided, otherwise fallback to FlutterLogo
+              if (imagePath != null && imagePath!.isNotEmpty)
+                SizedBox(height: 90, child: SafeImage(assetPath: imagePath!, fit: BoxFit.contain))
+              else
+                const FlutterLogo(size: 90),
               const SizedBox(height: 8),
               Text(title, style: const TextStyle(fontWeight: FontWeight.bold)),
               const SizedBox(height: 4),
