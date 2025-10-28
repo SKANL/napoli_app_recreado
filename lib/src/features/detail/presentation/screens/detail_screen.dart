@@ -117,9 +117,16 @@ class _DetailScreenState extends State<DetailScreen> {
                 expandedHeight: 300,
                 pinned: true,
                 backgroundColor: theme.colorScheme.primary,
-                leading: IconButton(
-                  icon: Icon(Icons.arrow_back, color: AppColors.white),
-                  onPressed: () => Navigator.pop(context),
+                leading: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Material(
+                    color: theme.colorScheme.surface.withAlpha((0.85 * 255).round()),
+                    shape: const CircleBorder(),
+                    child: IconButton(
+                      icon: Icon(Icons.arrow_back, color: theme.colorScheme.onSurface),
+                      onPressed: () => Navigator.pop(context),
+                    ),
+                  ),
                 ),
                 flexibleSpace: FlexibleSpaceBar(
                   background: Container(

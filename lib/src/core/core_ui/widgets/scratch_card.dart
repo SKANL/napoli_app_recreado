@@ -3,6 +3,7 @@ import '../theme.dart';
 import 'dart:ui' as ui;
 import 'dart:math' as math;
 import 'package:audioplayers/audioplayers.dart';
+import 'package:lottie/lottie.dart';
 
 /// Widget de scratch card mejorado con sonidos y efectos visuales
 class ScratchCard extends StatefulWidget {
@@ -131,24 +132,14 @@ class _ScratchCardState extends State<ScratchCard> with SingleTickerProviderStat
                 borderRadius: BorderRadius.circular(20 * scale),
                 child: Stack(
                   children: [
-                    // Contenido oculto (el cupón)
+                    // Contenido oculto (el cupón) - fondo sólido para cuando se revele
                     Container(
-                      decoration: BoxDecoration(
-                        gradient: LinearGradient(
-                          colors: [
-                            theme.colorScheme.primary,
-                            theme.colorScheme.secondary,
-                            theme.colorScheme.error,
-                          ],
-                          begin: Alignment.topLeft,
-                          end: Alignment.bottomRight,
-                        ),
-                      ),
+                      color: theme.colorScheme.surface,
                       child: Center(
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Icon(Icons.card_giftcard, size: 48 * scale, color: onPrimary),
+                            Icon(Icons.card_giftcard, size: 48 * scale, color: theme.colorScheme.primary),
                             SizedBox(height: 12 * scale),
                             Text(
                               widget.hiddenText,
@@ -156,11 +147,11 @@ class _ScratchCardState extends State<ScratchCard> with SingleTickerProviderStat
                               style: TextStyle(
                                 fontSize: 32 * scale,
                                 fontWeight: FontWeight.bold,
-                                color: onPrimary,
+                                color: theme.colorScheme.onSurface,
                                 letterSpacing: 3 * scale,
                                 shadows: [
                                   Shadow(
-                                    color: theme.shadowColor.withAlpha((0.4 * 255).round()),
+                                    color: theme.shadowColor.withAlpha((0.08 * 255).round()),
                                     offset: Offset(2 * scale, 2 * scale),
                                     blurRadius: 4 * scale,
                                   ),
@@ -171,7 +162,7 @@ class _ScratchCardState extends State<ScratchCard> with SingleTickerProviderStat
                             Container(
                               padding: EdgeInsets.symmetric(horizontal: 16 * scale, vertical: 6 * scale),
                               decoration: BoxDecoration(
-                                color: onPrimary.withAlpha((0.3 * 255).round()),
+                                color: theme.colorScheme.primary.withAlpha((0.12 * 255).round()),
                                 borderRadius: BorderRadius.circular(20 * scale),
                               ),
                               child: Text(
@@ -179,7 +170,7 @@ class _ScratchCardState extends State<ScratchCard> with SingleTickerProviderStat
                                 style: TextStyle(
                                   fontSize: 16 * scale,
                                   fontWeight: FontWeight.bold,
-                                  color: onPrimary,
+                                  color: theme.colorScheme.primary,
                                   letterSpacing: 2 * scale,
                                 ),
                               ),
@@ -196,10 +187,17 @@ class _ScratchCardState extends State<ScratchCard> with SingleTickerProviderStat
                           strokeWidth: 45 * scale,
                           circleRadius: 22.5 * scale,
                         ),
-                        child: Container(
+                          child: Container(
                           decoration: BoxDecoration(
-                            // Usar un gris sólido para la capa superior (legibilidad y consistencia)
-                            color: theme.colorScheme.onSurface.withAlpha((0.5 * 255).round()),
+                            // Usar un degradado verde -> rojo para la capa superior del rasca
+                            gradient: LinearGradient(
+                              colors: [
+                                theme.colorScheme.primary,
+                                theme.colorScheme.secondary,
+                              ],
+                              begin: Alignment.topLeft,
+                              end: Alignment.bottomRight,
+                            ),
                           ),
                           child: Stack(
                             children: [
@@ -225,11 +223,31 @@ class _ScratchCardState extends State<ScratchCard> with SingleTickerProviderStat
                                           child: child,
                                         );
                                       },
-                                        child: Icon(
-                                        Icons.touch_app,
-                                        size: 56 * scale,
-                                        color: onPrimary.withAlpha((0.9 * 255).round()),
-                                      ),
+                                        child: Container(
+                                          width: 96 * scale,
+                                          height: 96 * scale,
+                                          decoration: BoxDecoration(
+                                            color: theme.colorScheme.onPrimary.withAlpha((0.06 * 255).round()),
+                                            shape: BoxShape.circle,
+                                            boxShadow: [
+                                              BoxShadow(
+                                                color: theme.shadowColor.withAlpha((0.12 * 255).round()),
+                                                blurRadius: 8 * scale,
+                                                offset: Offset(0, 4 * scale),
+                                              ),
+                                            ],
+                                          ),
+                                          child: Center(
+                                            child: Lottie.asset(
+                                              'assets/animation/scratch.json',
+                                              width: 72 * scale,
+                                              height: 72 * scale,
+                                              fit: BoxFit.contain,
+                                              repeat: true,
+                                              animate: !_isRevealed,
+                                            ),
+                                          ),
+                                        ),
                                     ),
                                     SizedBox(height: 16 * scale),
                                     Text(
@@ -274,7 +292,7 @@ class _ScratchCardState extends State<ScratchCard> with SingleTickerProviderStat
                                         borderRadius: BorderRadius.circular(5 * scale),
                                         child: LinearProgressIndicator(
                                           value: _scratchProgress,
-                                          backgroundColor: AppColors.transparent,
+                                            backgroundColor: Colors.transparent,
                                           valueColor: AlwaysStoppedAnimation<Color>(
                                             onPrimary.withAlpha((0.9 * 255).round()),
                                           ),
