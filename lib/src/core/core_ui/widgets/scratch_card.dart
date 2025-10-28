@@ -274,7 +274,7 @@ class _ScratchCardState extends State<ScratchCard> with SingleTickerProviderStat
                                         borderRadius: BorderRadius.circular(5 * scale),
                                         child: LinearProgressIndicator(
                                           value: _scratchProgress,
-                                          backgroundColor: Colors.transparent,
+                                          backgroundColor: AppColors.transparent,
                                           valueColor: AlwaysStoppedAnimation<Color>(
                                             onPrimary.withAlpha((0.9 * 255).round()),
                                           ),
@@ -319,7 +319,7 @@ class _ScratchPainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     final paint = Paint()
-      ..color = Colors.transparent
+  ..color = AppColors.transparent
       ..blendMode = ui.BlendMode.clear
       ..strokeCap = StrokeCap.round
       ..strokeJoin = StrokeJoin.round

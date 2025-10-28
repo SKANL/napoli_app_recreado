@@ -12,6 +12,19 @@ class AppColors {
   // Colores adicionales para UI
   static const Color white = Colors.white;
   static const Color grey = Color(0xff959595);
+  static const Color transparent = Colors.transparent;
+
+  // Colores de superficie y texto para tema claro (usa paleta corporativa)
+  static const Color surfaceLight = Color(0xFFF5F5DC);      // Beige corporativo - Superficie clara
+  static const Color onSurfaceLight = Color(0xFF2F4F4F);    // Gris Pizarra oscuro - Texto en superficie clara
+  static const Color inputFillLight = Color(0xFFFFFFFF);    // Blanco para inputs (contraste sobre beige)
+
+  // Colores de superficie y texto para tema oscuro (incorpora identidad corporativa)
+  static const Color surfaceDark = Color(0xFF1A1A1A);       // Gris muy oscuro - Superficie oscura
+  static const Color onSurfaceDark = Color(0xFFF5F5DC);     // Beige claro - Texto en superficie oscura (contraste con corporativo)
+  static const Color cardDark = Color(0xFF2F4F4F);          // Gris Pizarra - Tarjetas en tema oscuro (corporativo)
+  static const Color inputFillDark = Color(0xFF2A2A2A);     // Gris oscuro para inputs
+  static const Color dividerDark = Color(0xFF3D5A3D);       // Verde oscuro (derivado del corporativo)
 }
 
 /// Clase de tema de la aplicación siguiendo Arquitectura V5
@@ -22,16 +35,19 @@ class AppTheme {
     const lightColorScheme = ColorScheme(
       brightness: Brightness.light,
 
-      // Colores principales
-      primary: AppColors.primaryGreen,
+      // Colores principales corporativos
+      primary: AppColors.primaryGreen,        // Verde Mar - Principal
       onPrimary: AppColors.white,
 
-      secondary: AppColors.accentTerracotta,
-      onSecondary: AppColors.textDark,
+      secondary: AppColors.accentTerracotta,  // Salmón/Terracota - Secundario
+      onSecondary: AppColors.white,
 
-  // Superficies y fondos: usar blanco/near-white para buena legibilidad
-  surface: Color(0xFFF7F7F7),
-  onSurface: Color(0xFF212121),
+      tertiary: AppColors.primaryRed,         // Rojo - Terciario/Acciones negativas
+      onTertiary: AppColors.white,
+
+      // Superficies y fondos: usar paleta corporativa
+      surface: AppColors.surfaceLight,        // Beige corporativo
+      onSurface: AppColors.onSurfaceLight,    // Gris Pizarra oscuro
 
       // Color de errores
       error: AppColors.primaryRed,
@@ -87,7 +103,7 @@ class AppTheme {
 
       // Tema de cards
       cardTheme: CardThemeData(
-        color: lightColorScheme.surface,
+        color: AppColors.backgroundBeige,  // Beige corporativo para cards
         elevation: 2,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(12),
@@ -97,19 +113,19 @@ class AppTheme {
       // Tema de inputs
       inputDecorationTheme: InputDecorationTheme(
         filled: true,
-        // ligero gris para inputs en light para separarlos del fondo beige
-        fillColor: const Color(0xFFF2F2F3),
+        // Blanco para inputs sobre fondo beige corporativo
+        fillColor: AppColors.inputFillLight,
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(8),
-          borderSide: BorderSide(color: lightColorScheme.primary),
+          borderSide: BorderSide(color: AppColors.primaryGreen, width: 1.5),
         ),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(8),
-          borderSide: BorderSide(color: AppColors.grey.withAlpha((0.35 * 255).round())),
+          borderSide: BorderSide(color: AppColors.primaryGreen.withAlpha((0.4 * 255).round())),
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(8),
-          borderSide: BorderSide(color: lightColorScheme.primary, width: 2),
+          borderSide: BorderSide(color: AppColors.primaryGreen, width: 2),
         ),
         errorBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(8),
@@ -126,20 +142,22 @@ class AppTheme {
 
   /// Obtiene el tema oscuro de la aplicación (opcional - mantenemos compatibilidad)
   static ThemeData getDarkTheme() {
-    // Ajustes de color para modo oscuro: usar surface levemente más claro
-    // para mejorar contraste en tarjetas y componentes dentro de diálogos.
+    // Ajustes de color para modo oscuro: incorpora identidad corporativa
     const darkColorScheme = ColorScheme(
       brightness: Brightness.dark,
 
-      primary: AppColors.primaryGreen,
+      primary: AppColors.primaryGreen,        // Verde Mar - Principal
       onPrimary: AppColors.white,
 
-      secondary: AppColors.accentTerracotta,
+      secondary: AppColors.accentTerracotta,  // Salmón/Terracota - Secundario
       onSecondary: AppColors.white,
 
-  // Superficies en oscuro: mantener contraste pero evitar negro absoluto
-  surface: Color(0xFF0B0B0B),
-  onSurface: Color(0xFFF2F2F2),
+      tertiary: AppColors.primaryRed,         // Rojo - Terciario
+      onTertiary: AppColors.white,
+
+      // Superficies en oscuro: con identidad corporativa
+      surface: AppColors.surfaceDark,         // Gris muy oscuro
+      onSurface: AppColors.onSurfaceDark,     // Beige claro (contraste)
 
       error: AppColors.primaryRed,
       onError: AppColors.white,
@@ -156,8 +174,8 @@ class AppTheme {
       ),
 
       appBarTheme: AppBarTheme(
-        backgroundColor: darkColorScheme.surface,
-        foregroundColor: darkColorScheme.onSurface,
+        backgroundColor: AppColors.primaryGreen,  // Verde corporativo para consistencia
+        foregroundColor: AppColors.white,
         elevation: 0,
       ),
 
@@ -170,7 +188,7 @@ class AppTheme {
   iconTheme: IconThemeData(color: darkColorScheme.onSurface),
 
   // Separadores y divisores ligeramente visibles
-  dividerColor: const Color(0xFF2B2B2B),
+  dividerColor: AppColors.dividerDark,
 
       // Botones en modo oscuro: darles el color primario para mejor contraste
       filledButtonTheme: FilledButtonThemeData(
@@ -191,28 +209,28 @@ class AppTheme {
 
       // Tarjetas ligeramente más claras que el fondo para destacarse
       cardTheme: CardThemeData(
-        color: const Color(0xFF1E1E1E),
+        color: AppColors.cardDark,
         elevation: 2,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(12),
         ),
       ),
 
-      // Inputs en oscuro: fondo tenue y bordes suaves
+      // Inputs en oscuro: fondo tenue y bordes suaves con verde corporativo
       inputDecorationTheme: InputDecorationTheme(
         filled: true,
-        fillColor: const Color(0xFF151515),
+        fillColor: AppColors.inputFillDark,
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(8),
-          borderSide: BorderSide(color: darkColorScheme.primary),
+          borderSide: BorderSide(color: AppColors.primaryGreen, width: 1.5),
         ),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(8),
-          borderSide: BorderSide(color: AppColors.grey.withAlpha((0.32 * 255).round())),
+          borderSide: BorderSide(color: AppColors.primaryGreen.withAlpha((0.35 * 255).round())),
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(8),
-          borderSide: BorderSide(color: darkColorScheme.primary, width: 2),
+          borderSide: BorderSide(color: AppColors.accentTerracotta, width: 2),
         ),
       ), dialogTheme: DialogThemeData(backgroundColor: darkColorScheme.surface),
     );

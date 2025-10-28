@@ -105,7 +105,8 @@ class _DetailScreenState extends State<DetailScreen> {
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(24),
                       // Use the theme's card color so this area adapts to light/dark
-                      color: Theme.of(context).cardColor,
+                      // Use the shared ColorScheme surface (single source of truth)
+                      color: Theme.of(context).colorScheme.surface,
                       boxShadow: [
                         BoxShadow(
                           color: Theme.of(context).shadowColor.withAlpha((Theme.of(context).brightness == Brightness.dark ? (0.22 * 255) : (0.12 * 255)).round()),

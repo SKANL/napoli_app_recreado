@@ -55,7 +55,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   color: theme.colorScheme.primary,
                   borderRadius: BorderRadius.circular(20),
                 ),
-                child: const Icon(Icons.local_pizza, size: 56, color: Colors.white),
+                child: Icon(Icons.local_pizza, size: 56, color: theme.colorScheme.onPrimary),
               ),
               const SizedBox(height: 24),
               Text('Bienvenido a', style: theme.textTheme.bodyMedium?.copyWith(fontSize: 16)),
@@ -75,7 +75,8 @@ class _LoginScreenState extends State<LoginScreen> {
                         prefixIcon: Icon(Icons.email, color: theme.colorScheme.primary),
                         border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
                         filled: true,
-                        fillColor: theme.cardColor,
+                        // Use ColorScheme.surface from the centralized theme
+                        fillColor: theme.colorScheme.surface,
                       ),
                       validator: (v) {
                         if (v == null || v.isEmpty) return 'Ingresa tu correo';
@@ -92,7 +93,8 @@ class _LoginScreenState extends State<LoginScreen> {
                         prefixIcon: Icon(Icons.lock, color: theme.colorScheme.primary),
                         border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
                         filled: true,
-                        fillColor: theme.cardColor,
+                        // Use ColorScheme.surface from the centralized theme
+                        fillColor: theme.colorScheme.surface,
                       ),
                       validator: (v) {
                         if (v == null || v.isEmpty) return 'Ingresa tu contraseña';
@@ -108,8 +110,8 @@ class _LoginScreenState extends State<LoginScreen> {
                         onPressed: _loading ? null : _doLogin,
                         style: ElevatedButton.styleFrom(shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12))),
                         child: _loading
-                            ? const SizedBox(height: 20, width: 20, child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white))
-                            : Text('Iniciar Sesión', style: theme.textTheme.titleMedium?.copyWith(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.white)),
+                            ? SizedBox(height: 20, width: 20, child: CircularProgressIndicator(strokeWidth: 2, color: theme.colorScheme.onPrimary))
+                            : Text('Iniciar Sesión', style: theme.textTheme.titleMedium?.copyWith(fontSize: 16, fontWeight: FontWeight.bold, color: theme.colorScheme.onPrimary)),
                       ),
                     ),
                   ],

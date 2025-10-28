@@ -47,7 +47,8 @@ class MapsScreen extends StatelessWidget {
                 child: Container(
                 padding: const EdgeInsets.all(16),
                 decoration: BoxDecoration(
-                  color: Theme.of(context).cardColor,
+                  // Use the shared ColorScheme surface defined in theme.dart
+                  color: Theme.of(context).colorScheme.surface,
                   borderRadius: BorderRadius.circular(12),
                   boxShadow: [
                     BoxShadow(
@@ -72,14 +73,14 @@ class MapsScreen extends StatelessWidget {
             Positioned(
               top: 16,
               left: 16,
-              child: IconButton(
+                child: IconButton(
                 onPressed: () => Navigator.of(context).pop(),
                 icon: Icon(
                   Icons.arrow_back_ios_new_outlined,
                   color: Theme.of(context).iconTheme.color,
                 ),
                 style: IconButton.styleFrom(
-                  backgroundColor: Theme.of(context).cardColor,
+                  backgroundColor: Theme.of(context).colorScheme.surface,
                   padding: const EdgeInsets.all(12),
                 ),
               ),
