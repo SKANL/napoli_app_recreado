@@ -82,7 +82,7 @@ class _CartScreenState extends State<CartScreen> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Lottie.asset(
-                    'assets/animation/eating.json',
+                    'assets/animation/Pizza_box_order.json',
                     width: 250,
                     height: 250,
                     fit: BoxFit.contain,
