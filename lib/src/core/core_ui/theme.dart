@@ -1,60 +1,153 @@
 import 'package:flutter/material.dart';
 
 /// Paleta de colores de la aplicación (Napoli Pizzeria)
+/// Basada en la identidad visual de Barrio Napoli con tonos tierra, verde corporativo y rojo CTA
 class AppColors {
-  // Paleta principal
-  static const Color primaryGreen = Color(0xFF2E8B57);      // Verde Mar
-  static const Color primaryRed = Color(0xFFCD5C5C);        // Rojo Indio
-  static const Color backgroundBeige = Color(0xFFF5F5DC);   // Beige
-  static const Color textDark = Color(0xFF2F4F4F);          // Gris Pizarra Oscuro
-  static const Color accentTerracotta = Color(0xFFE9967A);  // Salmón Oscuro (Terracota)
+  // ============================================
+  // COLORES PRINCIPALES - IDENTIDAD DE MARCA
+  // ============================================
   
-  // Colores adicionales para UI
-  static const Color white = Colors.white;
-  static const Color grey = Color(0xff959595);
+  /// Verde corporativo principal - Color de marca (#006A4E)
+  static const Color primaryGreen = Color(0xFF006A4E);
+  
+  /// Rojo para Call-to-Action y elementos críticos (#D93025)
+  static const Color primaryRed = Color(0xFFD93025);
+  
+  /// Texto oscuro principal - Gris pizarra para legibilidad (#333333)
+  static const Color textDark = Color(0xFF333333);
+  
+  /// Verde de éxito/confirmación (#4CAF50)
+  static const Color successGreen = Color(0xFF4CAF50);
+  
+  /// Naranja de advertencia (#FF9800)
+  static const Color warningOrange = Color(0xFFFF9800);
+  
+  /// Rojo de error (#E53935)
+  static const Color errorRed = Color(0xFFE53935);
+  
+  // ============================================
+  // TEMA CLARO - TONOS CÁLIDOS PIZZERÍA
+  // ============================================
+  
+  /// Background principal tema claro - Gris claro neutro (#F5F5F5)
+  static const Color backgroundLight = Color(0xFFF5F5F5);
+  
+  /// Surface de tarjetas tema claro - Blanco puro (#FFFFFF)
+  static const Color surfaceLight = Color(0xFFFFFFFF);
+  
+  /// Beige cálido para acentos - Tono pizzería (#F5E6D3)
+  static const Color accentBeige = Color(0xFFF5E6D3);
+  
+  /// Beige muy claro para fondos suaves (#FFF7F2)
+  static const Color accentBeigeLight = Color(0xFFFFF7F2);
+  
+  /// Texto en superficie clara - Gris oscuro legible (#333333)
+  static const Color onSurfaceLight = Color(0xFF333333);
+  
+  /// Texto secundario tema claro - Gris medio (#666666)
+  static const Color textSecondaryLight = Color(0xFF666666);
+  
+  /// Bordes y divisores tema claro - Gris claro (#E0E0E0)
+  static const Color dividerLight = Color(0xFFE0E0E0);
+  
+  /// Fill de inputs tema claro - Gris muy claro (#F5F5F5)
+  static const Color inputFillLight = Color(0xFFF5F5F5);
+  
+  // ============================================
+  // TEMA OSCURO - TONOS PROFUNDOS Y ELEGANTES
+  // ============================================
+  
+  /// Background principal tema oscuro - Negro carbón (#121212)
+  static const Color backgroundDark = Color(0xFF121212);
+  
+  /// Surface de tarjetas tema oscuro - Gris oscuro (#1E1E1E)
+  static const Color surfaceDark = Color(0xFF1E1E1E);
+  
+  /// Surface elevada tema oscuro - Gris medio oscuro (#2A2A2A)
+  static const Color surfaceElevatedDark = Color(0xFF2A2A2A);
+  
+  /// Texto en superficie oscura - Gris muy claro (#EEEEEE)
+  static const Color onSurfaceDark = Color(0xFFEEEEEE);
+  
+  /// Texto secundario tema oscuro - Gris medio (#C0C0C0)
+  static const Color textSecondaryDark = Color(0xFFC0C0C0);
+  
+  /// Bordes y divisores tema oscuro - Gris oscuro (#444444)
+  static const Color dividerDark = Color(0xFF444444);
+  
+  /// Fill de inputs tema oscuro - Gris muy oscuro (#2A2A2A)
+  static const Color inputFillDark = Color(0xFF2A2A2A);
+  
+  // ============================================
+  // COLORES UNIVERSALES
+  // ============================================
+  
+  /// Blanco puro - Universal (#FFFFFF)
+  static const Color white = Color(0xFFFFFFFF);
+  
+  /// Negro puro - Universal (#000000)
+  static const Color black = Color(0xFF000000);
+  
+  /// Transparente
   static const Color transparent = Colors.transparent;
-
-  // Colores de superficie y texto para tema claro (usa paleta corporativa)
-  static const Color surfaceLight = Color(0xFFF5F5DC);      // Beige corporativo - Superficie clara
-  static const Color onSurfaceLight = Color(0xFF2F4F4F);    // Gris Pizarra oscuro - Texto en superficie clara
-  static const Color inputFillLight = Color(0xFFFFFFFF);    // Blanco para inputs (contraste sobre beige)
-
-  // Colores de superficie y texto para tema oscuro (incorpora identidad corporativa)
-  static const Color surfaceDark = Color(0xFF1A1A1A);       // Gris muy oscuro - Superficie oscura
-  static const Color onSurfaceDark = Color(0xFFF5F5DC);     // Beige claro - Texto en superficie oscura (contraste con corporativo)
-  static const Color cardDark = Color(0xFF2F4F4F);          // Gris Pizarra - Tarjetas en tema oscuro (corporativo)
-  static const Color inputFillDark = Color(0xFF2A2A2A);     // Gris oscuro para inputs
-  static const Color dividerDark = Color(0xFF3D5A3D);       // Verde oscuro (derivado del corporativo)
+  
+  // ============================================
+  // GRADIENTES Y EFECTOS (tonos pizzería)
+  // ============================================
+  
+  /// Marrón tierra muy oscuro para gradientes (#3D2817)
+  static const Color earthBrownDark = Color(0xFF3D2817);
+  
+  /// Marrón tierra medio para gradientes (#4A3728)
+  static const Color earthBrownMedium = Color(0xFF4A3728);
+  
+  /// Naranja cálido para gradientes de fuego (#FFB347)
+  static const Color fireOrange = Color(0xFFFFB347);
+  
+  /// Rojo tostado para gradientes (#A82015)
+  static const Color toastedRed = Color(0xFFA82015);
 }
 
 /// Clase de tema de la aplicación siguiendo Arquitectura V5
 class AppTheme {
+  // Radios de esquinas estandarizados
+  static const double radiusSmall = 8.0;
+  static const double radiusMedium = 12.0;
+  static const double radiusLarge = 16.0;
+
+  // Espaciados estandarizados
+  static const double spacingXS = 4.0;
+  static const double spacingS = 8.0;
+  static const double spacingM = 16.0;
+  static const double spacingL = 24.0;
+  static const double spacingXL = 32.0;
+
   /// Obtiene el tema claro de la aplicación
   static ThemeData getLightTheme() {
-    // 1. Define el ColorScheme completo para el modo claro
+    // Define el ColorScheme completo para el modo claro
     const lightColorScheme = ColorScheme(
       brightness: Brightness.light,
 
       // Colores principales corporativos
-      primary: AppColors.primaryGreen,        // Verde Mar - Principal
+      primary: AppColors.primaryGreen,           // Verde corporativo #006A4E
       onPrimary: AppColors.white,
 
-      secondary: AppColors.accentTerracotta,  // Salmón/Terracota - Secundario
+      secondary: AppColors.primaryRed,           // Rojo CTA #D93025
       onSecondary: AppColors.white,
 
-      tertiary: AppColors.primaryRed,         // Rojo - Terciario/Acciones negativas
-      onTertiary: AppColors.white,
+      tertiary: AppColors.accentBeige,           // Beige cálido #F5E6D3
+      onTertiary: AppColors.textDark,
 
-      // Superficies y fondos: usar paleta corporativa
-      surface: AppColors.surfaceLight,        // Beige corporativo
-      onSurface: AppColors.onSurfaceLight,    // Gris Pizarra oscuro
+      // Superficies y fondos
+      surface: AppColors.surfaceLight,           // Blanco puro #FFFFFF
+      onSurface: AppColors.onSurfaceLight,       // Texto oscuro #333333
 
       // Color de errores
-      error: AppColors.primaryRed,
+      error: AppColors.errorRed,
       onError: AppColors.white,
     );
 
-    // 2. Construye el ThemeData usando el ColorScheme
+    // Construye el ThemeData usando el ColorScheme
     return ThemeData(
       useMaterial3: true,
       colorScheme: lightColorScheme,
@@ -66,36 +159,67 @@ class AppTheme {
         displayColor: lightColorScheme.onSurface,
       ),
 
-  // Fondo y superficie principales: usar surface para evitar API deprecated
-  scaffoldBackgroundColor: lightColorScheme.surface,
-  canvasColor: lightColorScheme.surface,
+      // Fondo principal - Gris claro neutro
+      scaffoldBackgroundColor: AppColors.backgroundLight,
+      canvasColor: AppColors.backgroundLight,
 
       // Tema de AppBar
       appBarTheme: AppBarTheme(
-        backgroundColor: lightColorScheme.primary,
-        foregroundColor: lightColorScheme.onPrimary,
-        elevation: 0,
+        backgroundColor: lightColorScheme.surface,
+        foregroundColor: lightColorScheme.onSurface,
+        elevation: 1,
         centerTitle: false,
-      ),
-
-      // Tema de botones
-      filledButtonTheme: FilledButtonThemeData(
-        style: FilledButton.styleFrom(
-          backgroundColor: lightColorScheme.primary,
-          foregroundColor: lightColorScheme.onPrimary,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(8),
-          ),
-          padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 24),
+        iconTheme: IconThemeData(color: lightColorScheme.primary),
+        titleTextStyle: TextStyle(
+          fontFamily: 'Avenir',
+          fontSize: 20,
+          fontWeight: FontWeight.bold,
+          color: lightColorScheme.onSurface,
         ),
       ),
 
+      // Tema de botones elevados
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: ElevatedButton.styleFrom(
-          backgroundColor: lightColorScheme.primary,
-          foregroundColor: lightColorScheme.onPrimary,
+          backgroundColor: lightColorScheme.secondary,  // Rojo CTA
+          foregroundColor: lightColorScheme.onSecondary,
+          elevation: 2,
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(8),
+            borderRadius: BorderRadius.circular(radiusMedium),
+          ),
+          padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 24),
+          textStyle: const TextStyle(
+            fontFamily: 'Avenir',
+            fontSize: 16,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+      ),
+
+      // Tema de botones filled
+      filledButtonTheme: FilledButtonThemeData(
+        style: FilledButton.styleFrom(
+          backgroundColor: lightColorScheme.secondary,  // Rojo CTA
+          foregroundColor: lightColorScheme.onSecondary,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(radiusMedium),
+          ),
+          padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 24),
+          textStyle: const TextStyle(
+            fontFamily: 'Avenir',
+            fontSize: 16,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+      ),
+
+      // Tema de botones outlined
+      outlinedButtonTheme: OutlinedButtonThemeData(
+        style: OutlinedButton.styleFrom(
+          foregroundColor: lightColorScheme.primary,
+          side: BorderSide(color: lightColorScheme.primary, width: 1.5),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(radiusMedium),
           ),
           padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 24),
         ),
@@ -103,33 +227,48 @@ class AppTheme {
 
       // Tema de cards
       cardTheme: CardThemeData(
-        color: AppColors.backgroundBeige,  // Beige corporativo para cards
+        color: lightColorScheme.surface,  // Blanco para tarjetas
         elevation: 2,
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: BorderRadius.circular(radiusMedium),
         ),
+        shadowColor: AppColors.black.withAlpha((0.08 * 255).round()),
       ),
 
       // Tema de inputs
       inputDecorationTheme: InputDecorationTheme(
         filled: true,
-        // Blanco para inputs sobre fondo beige corporativo
-        fillColor: AppColors.inputFillLight,
+        fillColor: AppColors.inputFillLight,  // Gris muy claro
+        contentPadding: const EdgeInsets.all(16),
         border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(8),
-          borderSide: BorderSide(color: AppColors.primaryGreen, width: 1.5),
+          borderRadius: BorderRadius.circular(radiusMedium),
+          borderSide: BorderSide(color: AppColors.dividerLight),
         ),
         enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(8),
-          borderSide: BorderSide(color: AppColors.primaryGreen.withAlpha((0.4 * 255).round())),
+          borderRadius: BorderRadius.circular(radiusMedium),
+          borderSide: BorderSide(color: AppColors.dividerLight, width: 1),
         ),
         focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(8),
-          borderSide: BorderSide(color: AppColors.primaryGreen, width: 2),
+          borderRadius: BorderRadius.circular(radiusMedium),
+          borderSide: BorderSide(color: lightColorScheme.primary, width: 2),
         ),
         errorBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(8),
-          borderSide: BorderSide(color: lightColorScheme.error),
+          borderRadius: BorderRadius.circular(radiusMedium),
+          borderSide: BorderSide(color: lightColorScheme.error, width: 1),
+        ),
+        focusedErrorBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(radiusMedium),
+          borderSide: BorderSide(color: lightColorScheme.error, width: 2),
+        ),
+        labelStyle: TextStyle(
+          fontFamily: 'Avenir',
+          fontSize: 14,
+          color: AppColors.textSecondaryLight,
+        ),
+        hintStyle: TextStyle(
+          fontFamily: 'Avenir',
+          fontSize: 14,
+          color: AppColors.textSecondaryLight.withAlpha((0.6 * 255).round()),
         ),
       ),
 
@@ -137,102 +276,203 @@ class AppTheme {
       iconTheme: IconThemeData(
         color: lightColorScheme.onSurface,
       ),
+
+      // Tema de dividers
+      dividerTheme: DividerThemeData(
+        color: AppColors.dividerLight,
+        thickness: 1,
+      ),
+
+      // Tema de SnackBar
+      snackBarTheme: SnackBarThemeData(
+        backgroundColor: AppColors.textDark,
+        contentTextStyle: const TextStyle(
+          fontFamily: 'Avenir',
+          fontSize: 14,
+          color: AppColors.white,
+        ),
+        behavior: SnackBarBehavior.floating,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(radiusSmall),
+        ),
+      ),
     );
   }
 
-  /// Obtiene el tema oscuro de la aplicación (opcional - mantenemos compatibilidad)
+  /// Obtiene el tema oscuro de la aplicación
   static ThemeData getDarkTheme() {
-    // Ajustes de color para modo oscuro: incorpora identidad corporativa
+    // Define el ColorScheme completo para el modo oscuro
     const darkColorScheme = ColorScheme(
       brightness: Brightness.dark,
 
-      primary: AppColors.primaryGreen,        // Verde Mar - Principal
+      // Colores principales corporativos
+      primary: AppColors.primaryGreen,           // Verde corporativo #006A4E
       onPrimary: AppColors.white,
 
-      secondary: AppColors.accentTerracotta,  // Salmón/Terracota - Secundario
+      secondary: AppColors.primaryRed,           // Rojo CTA #D93025
       onSecondary: AppColors.white,
 
-      tertiary: AppColors.primaryRed,         // Rojo - Terciario
-      onTertiary: AppColors.white,
+      tertiary: AppColors.accentBeige,           // Beige cálido
+      onTertiary: AppColors.textDark,
 
-      // Superficies en oscuro: con identidad corporativa
-      surface: AppColors.surfaceDark,         // Gris muy oscuro
-      onSurface: AppColors.onSurfaceDark,     // Beige claro (contraste)
+      // Superficies y fondos oscuros
+      surface: AppColors.surfaceDark,            // Gris oscuro #1E1E1E
+      onSurface: AppColors.onSurfaceDark,        // Gris muy claro #EEEEEE
 
-      error: AppColors.primaryRed,
+      // Color de errores
+      error: AppColors.errorRed,
       onError: AppColors.white,
     );
 
+    // Construye el ThemeData usando el ColorScheme
     return ThemeData(
       useMaterial3: true,
       colorScheme: darkColorScheme,
       fontFamily: 'Avenir',
 
+      // El tema del texto usará `colorScheme.onSurface` por defecto
       textTheme: const TextTheme().apply(
         bodyColor: darkColorScheme.onSurface,
         displayColor: darkColorScheme.onSurface,
       ),
 
+      // Fondo principal - Negro carbón
+      scaffoldBackgroundColor: AppColors.backgroundDark,
+      canvasColor: AppColors.backgroundDark,
+
+      // Tema de AppBar
       appBarTheme: AppBarTheme(
-        backgroundColor: AppColors.primaryGreen,  // Verde corporativo para consistencia
-        foregroundColor: AppColors.white,
-        elevation: 0,
+        backgroundColor: darkColorScheme.surface,
+        foregroundColor: darkColorScheme.onSurface,
+        elevation: 2,
+        centerTitle: false,
+        iconTheme: IconThemeData(color: darkColorScheme.onSurface),
+        titleTextStyle: TextStyle(
+          fontFamily: 'Avenir',
+          fontSize: 20,
+          fontWeight: FontWeight.bold,
+          color: darkColorScheme.onSurface,
+        ),
       ),
 
-  // Fondo general de la aplicación en modo oscuro (usar surface en lugar de background)
-  scaffoldBackgroundColor: darkColorScheme.surface,
-  // Color para elementos flotantes y barras
-  canvasColor: darkColorScheme.surface,
+      // Tema de botones elevados
+      elevatedButtonTheme: ElevatedButtonThemeData(
+        style: ElevatedButton.styleFrom(
+          backgroundColor: darkColorScheme.secondary,  // Rojo CTA
+          foregroundColor: darkColorScheme.onSecondary,
+          elevation: 2,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(radiusMedium),
+          ),
+          padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 24),
+          textStyle: const TextStyle(
+            fontFamily: 'Avenir',
+            fontSize: 16,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+      ),
 
-  // Asegurar que los iconos sean visibles
-  iconTheme: IconThemeData(color: darkColorScheme.onSurface),
-
-  // Separadores y divisores ligeramente visibles
-  dividerColor: AppColors.dividerDark,
-
-      // Botones en modo oscuro: darles el color primario para mejor contraste
+      // Tema de botones filled
       filledButtonTheme: FilledButtonThemeData(
         style: FilledButton.styleFrom(
-          backgroundColor: darkColorScheme.primary,
-          foregroundColor: darkColorScheme.onPrimary,
+          backgroundColor: darkColorScheme.secondary,  // Rojo CTA
+          foregroundColor: darkColorScheme.onSecondary,
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(8),
+            borderRadius: BorderRadius.circular(radiusMedium),
+          ),
+          padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 24),
+          textStyle: const TextStyle(
+            fontFamily: 'Avenir',
+            fontSize: 16,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+      ),
+
+      // Tema de botones outlined
+      outlinedButtonTheme: OutlinedButtonThemeData(
+        style: OutlinedButton.styleFrom(
+          foregroundColor: darkColorScheme.primary,
+          side: BorderSide(color: darkColorScheme.primary, width: 1.5),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(radiusMedium),
           ),
           padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 24),
         ),
       ),
 
-      floatingActionButtonTheme: FloatingActionButtonThemeData(
-        backgroundColor: darkColorScheme.primary,
-        foregroundColor: darkColorScheme.onPrimary,
-      ),
-
-      // Tarjetas ligeramente más claras que el fondo para destacarse
+      // Tema de cards
       cardTheme: CardThemeData(
-        color: AppColors.cardDark,
+        color: AppColors.surfaceElevatedDark,  // Gris medio oscuro #2A2A2A
         elevation: 2,
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: BorderRadius.circular(radiusMedium),
+        ),
+        shadowColor: AppColors.black.withAlpha((0.3 * 255).round()),
+      ),
+
+      // Tema de inputs
+      inputDecorationTheme: InputDecorationTheme(
+        filled: true,
+        fillColor: AppColors.inputFillDark,  // Gris muy oscuro
+        contentPadding: const EdgeInsets.all(16),
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(radiusMedium),
+          borderSide: BorderSide(color: AppColors.dividerDark),
+        ),
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(radiusMedium),
+          borderSide: BorderSide(color: AppColors.dividerDark, width: 1),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(radiusMedium),
+          borderSide: BorderSide(color: darkColorScheme.primary, width: 2),
+        ),
+        errorBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(radiusMedium),
+          borderSide: BorderSide(color: darkColorScheme.error, width: 1),
+        ),
+        focusedErrorBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(radiusMedium),
+          borderSide: BorderSide(color: darkColorScheme.error, width: 2),
+        ),
+        labelStyle: TextStyle(
+          fontFamily: 'Avenir',
+          fontSize: 14,
+          color: AppColors.textSecondaryDark,
+        ),
+        hintStyle: TextStyle(
+          fontFamily: 'Avenir',
+          fontSize: 14,
+          color: AppColors.textSecondaryDark.withAlpha((0.6 * 255).round()),
         ),
       ),
 
-      // Inputs en oscuro: fondo tenue y bordes suaves con verde corporativo
-      inputDecorationTheme: InputDecorationTheme(
-        filled: true,
-        fillColor: AppColors.inputFillDark,
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(8),
-          borderSide: BorderSide(color: AppColors.primaryGreen, width: 1.5),
+      // Tema de iconos
+      iconTheme: IconThemeData(
+        color: darkColorScheme.onSurface,
+      ),
+
+      // Tema de dividers
+      dividerTheme: DividerThemeData(
+        color: AppColors.dividerDark,
+        thickness: 1,
+      ),
+
+      // Tema de SnackBar
+      snackBarTheme: SnackBarThemeData(
+        backgroundColor: AppColors.surfaceElevatedDark,
+        contentTextStyle: const TextStyle(
+          fontFamily: 'Avenir',
+          fontSize: 14,
+          color: AppColors.onSurfaceDark,
         ),
-        enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(8),
-          borderSide: BorderSide(color: AppColors.primaryGreen.withAlpha((0.35 * 255).round())),
+        behavior: SnackBarBehavior.floating,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(radiusSmall),
         ),
-        focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(8),
-          borderSide: BorderSide(color: AppColors.accentTerracotta, width: 2),
-        ),
-      ), dialogTheme: DialogThemeData(backgroundColor: darkColorScheme.surface),
+      ),
     );
   }
 }

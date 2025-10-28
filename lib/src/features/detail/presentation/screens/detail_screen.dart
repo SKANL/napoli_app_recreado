@@ -123,13 +123,13 @@ class _DetailScreenState extends State<DetailScreen> {
                 ),
                 flexibleSpace: FlexibleSpaceBar(
                   background: Container(
-                    decoration: BoxDecoration(
+                    decoration: const BoxDecoration(
                       gradient: LinearGradient(
                         begin: Alignment.topLeft,
                         end: Alignment.bottomRight,
                         colors: [
-                          AppColors.backgroundBeige,
-                          AppColors.white,
+                          AppColors.accentBeigeLight,
+                          AppColors.surfaceLight,
                         ],
                       ),
                     ),

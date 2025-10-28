@@ -199,7 +199,7 @@ class _ScratchCardState extends State<ScratchCard> with SingleTickerProviderStat
                         child: Container(
                           decoration: BoxDecoration(
                             // Usar un gris sólido para la capa superior (legibilidad y consistencia)
-                            color: AppColors.grey,
+                            color: theme.colorScheme.onSurface.withAlpha((0.5 * 255).round()),
                           ),
                           child: Stack(
                             children: [

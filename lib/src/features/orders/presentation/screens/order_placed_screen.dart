@@ -47,7 +47,7 @@ class _OrderPlacedScreenState extends State<OrderPlacedScreen> {
           children: [
             Icon(
               Icons.star_rounded,
-              color: AppColors.accentTerracotta,
+              color: Theme.of(context).colorScheme.secondary,
               size: 60,
             ),
             const SizedBox(height: 12),
@@ -55,7 +55,7 @@ class _OrderPlacedScreenState extends State<OrderPlacedScreen> {
               '¡Pedido Entregado!',
               style: Theme.of(context).textTheme.titleLarge?.copyWith(
                 fontWeight: FontWeight.bold,
-                color: AppColors.primaryGreen,
+                color: Theme.of(context).colorScheme.primary,
               ),
               textAlign: TextAlign.center,
             ),
@@ -84,7 +84,7 @@ class _OrderPlacedScreenState extends State<OrderPlacedScreen> {
                     minWidth: 40,
                     minHeight: 40,
                   ),
-                  color: AppColors.accentTerracotta,
+                  color: Theme.of(context).colorScheme.secondary,
                   onPressed: () {
                     Navigator.of(context).pop();
                     _finishOrder();
@@ -132,19 +132,19 @@ class _OrderPlacedScreenState extends State<OrderPlacedScreen> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     return Scaffold(
-      backgroundColor: AppColors.white,
+      backgroundColor: theme.scaffoldBackgroundColor,
       appBar: AppBar(
         title: Text(
           'Estado del Pedido',
           style: theme.textTheme.titleLarge?.copyWith(
             fontWeight: FontWeight.bold,
-            color: AppColors.primaryGreen,
+            color: theme.colorScheme.primary,
           ),
         ),
-        backgroundColor: AppColors.white,
+        backgroundColor: theme.colorScheme.surface,
         elevation: 1,
         leading: IconButton(
-          icon: Icon(Icons.close, color: AppColors.primaryGreen),
+          icon: Icon(Icons.close, color: theme.colorScheme.primary),
           onPressed: () {
             showDialog(
               context: context,
@@ -173,7 +173,7 @@ class _OrderPlacedScreenState extends State<OrderPlacedScreen> {
                     child: Text(
                       'Salir',
                       style: TextStyle(
-                        color: AppColors.primaryRed,
+                        color: theme.colorScheme.secondary,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
@@ -192,15 +192,15 @@ class _OrderPlacedScreenState extends State<OrderPlacedScreen> {
               margin: const EdgeInsets.symmetric(horizontal: 24),
               padding: const EdgeInsets.all(16),
               decoration: BoxDecoration(
-                color: AppColors.backgroundBeige,
-                borderRadius: BorderRadius.circular(12),
+                color: theme.colorScheme.tertiary,
+                borderRadius: BorderRadius.circular(AppTheme.radiusMedium),
               ),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Icon(
                     Icons.receipt_long,
-                    color: AppColors.primaryGreen,
+                    color: theme.colorScheme.primary,
                     size: 24,
                   ),
                   const SizedBox(width: 12),
@@ -209,7 +209,7 @@ class _OrderPlacedScreenState extends State<OrderPlacedScreen> {
                       'Pedido #${DateTime.now().millisecondsSinceEpoch % 10000}',
                       style: theme.textTheme.titleMedium?.copyWith(
                         fontWeight: FontWeight.bold,
-                        color: AppColors.primaryGreen,
+                        color: theme.colorScheme.primary,
                       ),
                       overflow: TextOverflow.ellipsis,
                       maxLines: 1,
@@ -239,7 +239,7 @@ class _OrderPlacedScreenState extends State<OrderPlacedScreen> {
                           Icon(
                             Icons.map,
                             size: 60,
-                            color: AppColors.primaryGreen,
+                            color: theme.colorScheme.primary,
                           ),
                           const SizedBox(height: 12),
                           Text(
@@ -258,7 +258,7 @@ class _OrderPlacedScreenState extends State<OrderPlacedScreen> {
                       child: Container(
                         padding: const EdgeInsets.all(12),
                         decoration: BoxDecoration(
-                          color: AppColors.white,
+                          color: theme.colorScheme.surface,
                           borderRadius: BorderRadius.circular(10),
                           boxShadow: [
                             BoxShadow(
@@ -270,10 +270,10 @@ class _OrderPlacedScreenState extends State<OrderPlacedScreen> {
                         child: Row(
                           children: [
                             CircleAvatar(
-                              backgroundColor: AppColors.primaryGreen,
+                              backgroundColor: theme.colorScheme.primary,
                               child: Icon(
                                 Icons.person,
-                                color: AppColors.white,
+                                color: theme.colorScheme.onPrimary,
                               ),
                             ),
                             const SizedBox(width: 12),
@@ -298,7 +298,7 @@ class _OrderPlacedScreenState extends State<OrderPlacedScreen> {
                             ),
                             IconButton(
                               icon: const Icon(Icons.phone),
-                              color: AppColors.primaryGreen,
+                              color: theme.colorScheme.primary,
                               onPressed: () {},
                             ),
                           ],

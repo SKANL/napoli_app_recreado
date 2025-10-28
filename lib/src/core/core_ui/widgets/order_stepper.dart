@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:napoli_app_v1/src/core/core_ui/theme.dart';
+// theme not required here; this widget uses Theme.of(context)
 
 class OrderStepper extends StatelessWidget {
   final int currentStep;
@@ -21,7 +21,7 @@ class OrderStepper extends StatelessWidget {
             subtitle: 'Hemos recibido tu pedido',
             icon: Icons.check_circle,
           ),
-          _buildConnector(0),
+          _buildConnector(context, 0),
           _buildStep(
             context: context,
             theme: theme,
@@ -30,7 +30,7 @@ class OrderStepper extends StatelessWidget {
             subtitle: 'Tu comida se está preparando con amor',
             icon: Icons.restaurant_menu,
           ),
-          _buildConnector(1),
+          _buildConnector(context, 1),
           _buildStep(
             context: context,
             theme: theme,
@@ -39,7 +39,7 @@ class OrderStepper extends StatelessWidget {
             subtitle: '¡Tu pedido ya va hacia ti!',
             icon: Icons.delivery_dining,
           ),
-          _buildConnector(2),
+          _buildConnector(context, 2),
           _buildStep(
             context: context,
             theme: theme,
@@ -70,12 +70,12 @@ class OrderStepper extends StatelessWidget {
           width: 50,
           height: 50,
           decoration: BoxDecoration(
-            color: isCompleted ? AppColors.primaryGreen : theme.disabledColor,
+            color: isCompleted ? theme.colorScheme.primary : theme.disabledColor,
             shape: BoxShape.circle,
             boxShadow: isCurrent
                 ? [
                     BoxShadow(
-                      color: AppColors.primaryGreen.withAlpha((0.4 * 255).round()),
+                      color: theme.colorScheme.primary.withAlpha((0.4 * 255).round()),
                       blurRadius: 12,
                       spreadRadius: 2,
                     ),
@@ -84,7 +84,7 @@ class OrderStepper extends StatelessWidget {
           ),
           child: Icon(
             icon,
-            color: isCompleted ? AppColors.white : theme.colorScheme.onSurface.withAlpha((0.6 * 255).round()),
+            color: isCompleted ? theme.colorScheme.onPrimary : theme.colorScheme.onSurface.withAlpha((0.6 * 255).round()),
             size: 26,
           ),
         ),
@@ -97,9 +97,9 @@ class OrderStepper extends StatelessWidget {
                 title,
                 style: theme.textTheme.titleMedium?.copyWith(
                   fontWeight: isCurrent ? FontWeight.bold : FontWeight.w600,
-                  color: isCompleted
-                      ? AppColors.primaryGreen
-                      : theme.colorScheme.onSurface.withAlpha((0.7 * 255).round()),
+          color: isCompleted
+            ? theme.colorScheme.primary
+            : theme.colorScheme.onSurface.withAlpha((0.7 * 255).round()),
                 ),
               ),
               const SizedBox(height: 4),
@@ -116,15 +116,15 @@ class OrderStepper extends StatelessWidget {
     );
   }
 
-  Widget _buildConnector(int stepNumber) {
+  Widget _buildConnector(BuildContext context, int stepNumber) {
     final isCompleted = stepNumber < currentStep;
-    final theme = Theme.of(WidgetsBinding.instance.rootElement!);
+    final theme = Theme.of(context);
 
     return Container(
       margin: const EdgeInsets.only(left: 24, top: 8, bottom: 8),
       width: 3,
       height: 30,
-      color: isCompleted ? AppColors.primaryGreen : theme.disabledColor,
+      color: isCompleted ? theme.colorScheme.primary : theme.disabledColor,
     );
   }
 }

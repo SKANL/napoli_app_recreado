@@ -97,7 +97,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           backgroundColor: AppColors.primaryGreen,
                           foregroundColor: AppColors.white,
                           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-                          side: BorderSide(color: AppColors.accentTerracotta.withAlpha((0.16 * 255).round())),
+                          side: BorderSide(color: AppColors.accentBeige.withAlpha((0.35 * 255).round())),
                           elevation: 3,
                         ),
                         onPressed: _loading ? null : _register,

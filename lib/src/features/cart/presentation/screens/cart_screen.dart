@@ -36,7 +36,7 @@ class _CartScreenState extends State<CartScreen> {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text('Cupón "$code" no válido'),
-          backgroundColor: AppColors.primaryRed,
+          backgroundColor: Theme.of(context).colorScheme.error,
         ),
       );
       return;
@@ -47,7 +47,7 @@ class _CartScreenState extends State<CartScreen> {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Text('Cupón ${coupon.code} aplicado: ${coupon.description}'),
-        backgroundColor: AppColors.primaryGreen,
+        backgroundColor: Theme.of(context).colorScheme.primary,
       ),
     );
   }
@@ -55,20 +55,21 @@ class _CartScreenState extends State<CartScreen> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    
     return Scaffold(
-      backgroundColor: AppColors.backgroundBeige,
+      backgroundColor: theme.scaffoldBackgroundColor,
       appBar: AppBar(
         title: Text(
           'Mi Carrito',
           style: theme.textTheme.titleLarge?.copyWith(
             fontWeight: FontWeight.bold,
-            color: AppColors.textDark,
+            color: theme.colorScheme.onSurface,
           ),
         ),
-        backgroundColor: AppColors.backgroundBeige,
+        backgroundColor: theme.appBarTheme.backgroundColor,
         elevation: 1,
         leading: IconButton(
-          icon: Icon(Icons.arrow_back, color: AppColors.textDark),
+          icon: Icon(Icons.arrow_back, color: theme.colorScheme.onSurface),
           onPressed: () => Navigator.pop(context),
         ),
       ),
@@ -105,7 +106,7 @@ class _CartScreenState extends State<CartScreen> {
                   ElevatedButton(
                     onPressed: () => Navigator.pop(context),
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: AppColors.primaryRed,
+                      backgroundColor: theme.colorScheme.secondary,
                       padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 16),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(12),
@@ -115,7 +116,7 @@ class _CartScreenState extends State<CartScreen> {
                       'Explorar menú',
                       style: theme.textTheme.titleMedium?.copyWith(
                         fontWeight: FontWeight.bold,
-                        color: AppColors.white,
+                        color: theme.colorScheme.onSecondary,
                       ),
                     ),
                   ),
@@ -137,7 +138,7 @@ class _CartScreenState extends State<CartScreen> {
                       margin: const EdgeInsets.only(bottom: 16),
                       padding: const EdgeInsets.all(16),
                       decoration: BoxDecoration(
-                        color: AppColors.white,
+                          color: theme.colorScheme.surface,
                         borderRadius: BorderRadius.circular(12),
                         boxShadow: [
                           BoxShadow(
@@ -158,12 +159,12 @@ class _CartScreenState extends State<CartScreen> {
                                 width: 70,
                                 height: 70,
                                 decoration: BoxDecoration(
-                                  color: AppColors.backgroundBeige,
-                                  borderRadius: BorderRadius.circular(8),
+                                  color: theme.colorScheme.tertiary,
+                                  borderRadius: BorderRadius.circular(AppTheme.radiusSmall),
                                 ),
                                 child: Icon(
                                   Icons.restaurant_menu,
-                                  color: AppColors.primaryRed,
+                                  color: theme.colorScheme.secondary,
                                   size: 35,
                                 ),
                               ),
@@ -176,9 +177,9 @@ class _CartScreenState extends State<CartScreen> {
                                     Text(
                                       item.name,
                                       style: theme.textTheme.titleMedium?.copyWith(
-                                        fontWeight: FontWeight.bold,
-                                        color: AppColors.primaryGreen,
-                                      ),
+                                          fontWeight: FontWeight.bold,
+                                          color: theme.colorScheme.primary,
+                                        ),
                                     ),
                                     if (item.selectedExtras.isNotEmpty) ...[
                                       const SizedBox(height: 6),
@@ -190,11 +191,11 @@ class _CartScreenState extends State<CartScreen> {
                                       ),
                                     ],
                                     const SizedBox(height: 8),
-                                    Text(
+                                      Text(
                                       '\$${item.totalPrice} MXN',
                                       style: theme.textTheme.titleMedium?.copyWith(
                                         fontWeight: FontWeight.bold,
-                                        color: AppColors.primaryRed,
+                                        color: theme.colorScheme.secondary,
                                       ),
                                     ),
                                   ],
@@ -215,7 +216,7 @@ class _CartScreenState extends State<CartScreen> {
                               IconButton(
                                 onPressed: () => cartService.updateQuantity(index, item.quantity - 1),
                                 icon: const Icon(Icons.remove_circle_outline),
-                                color: AppColors.primaryRed,
+                                color: theme.colorScheme.secondary,
                               ),
                               Container(
                                 padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
@@ -233,7 +234,7 @@ class _CartScreenState extends State<CartScreen> {
                               IconButton(
                                 onPressed: () => cartService.updateQuantity(index, item.quantity + 1),
                                 icon: const Icon(Icons.add_circle_outline),
-                                color: AppColors.primaryRed,
+                                color: theme.colorScheme.secondary,
                               ),
                             ],
                           ),
@@ -247,7 +248,7 @@ class _CartScreenState extends State<CartScreen> {
               Container(
                 padding: const EdgeInsets.all(20),
                 decoration: BoxDecoration(
-                  color: AppColors.backgroundBeige,
+                  color: theme.colorScheme.surface,
                   borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
                   boxShadow: [
                     BoxShadow(
@@ -265,18 +266,18 @@ class _CartScreenState extends State<CartScreen> {
                       Container(
                         padding: const EdgeInsets.all(12),
                         decoration: BoxDecoration(
-                          color: AppColors.white,
+                          color: theme.colorScheme.surface,
                           borderRadius: BorderRadius.circular(8),
                         ),
                         child: Row(
                           children: [
-                            Icon(Icons.access_time, color: AppColors.textDark, size: 20),
+                            Icon(Icons.access_time, color: theme.colorScheme.onSurface, size: 20),
                             const SizedBox(width: 8),
                             Text(
                               'Tiempo estimado: 25-35 min',
                               style: theme.textTheme.bodyMedium?.copyWith(
                                 fontWeight: FontWeight.w600,
-                                color: AppColors.textDark,
+                                color: theme.colorScheme.onSurface,
                               ),
                             ),
                           ],
@@ -287,7 +288,7 @@ class _CartScreenState extends State<CartScreen> {
                       Container(
                         padding: const EdgeInsets.all(12),
                         decoration: BoxDecoration(
-                          color: AppColors.white,
+                          color: theme.colorScheme.surface,
                           borderRadius: BorderRadius.circular(8),
                           border: Border.all(color: theme.dividerColor),
                         ),
@@ -311,8 +312,8 @@ class _CartScreenState extends State<CartScreen> {
                             TextButton(
                               onPressed: _applyCoupon,
                               style: TextButton.styleFrom(
-                                backgroundColor: AppColors.primaryGreen,
-                                foregroundColor: AppColors.white,
+                                backgroundColor: theme.colorScheme.primary,
+                                foregroundColor: theme.colorScheme.onPrimary,
                                 padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(6),
@@ -328,27 +329,27 @@ class _CartScreenState extends State<CartScreen> {
                         Container(
                           padding: const EdgeInsets.all(12),
                           decoration: BoxDecoration(
-                            color: AppColors.primaryGreen.withAlpha((0.1 * 255).round()),
+                            color: theme.colorScheme.primary.withAlpha((0.1 * 255).round()),
                             borderRadius: BorderRadius.circular(8),
                             border: Border.all(
-                              color: AppColors.primaryGreen.withAlpha((0.3 * 255).round()),
+                              color: theme.colorScheme.primary.withAlpha((0.3 * 255).round()),
                             ),
                           ),
                           child: Row(
                             children: [
-                              Icon(Icons.local_offer, color: AppColors.primaryGreen, size: 20),
+                              Icon(Icons.local_offer, color: theme.colorScheme.primary, size: 20),
                               const SizedBox(width: 8),
                               Expanded(
                                 child: Text(
                                   '${cartService.appliedCoupon!.code} aplicado: ${cartService.appliedCoupon!.description}',
                                   style: theme.textTheme.bodyMedium?.copyWith(
                                     fontWeight: FontWeight.w600,
-                                    color: AppColors.primaryGreen,
+                                    color: theme.colorScheme.primary,
                                   ),
                                 ),
                               ),
                               IconButton(
-                                icon: Icon(Icons.close, color: AppColors.primaryGreen, size: 18),
+                                icon: Icon(Icons.close, color: theme.colorScheme.primary, size: 18),
                                 padding: EdgeInsets.zero,
                                 constraints: const BoxConstraints(),
                                 onPressed: () {
@@ -402,23 +403,23 @@ class _CartScreenState extends State<CartScreen> {
                       if (cartService.discount > 0) ...[
                         const SizedBox(height: 8),
                         Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                              'Descuento',
-                              style: theme.textTheme.titleMedium?.copyWith(
-                                color: AppColors.primaryGreen,
-                              ),
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            'Descuento',
+                            style: theme.textTheme.titleMedium?.copyWith(
+                              color: theme.colorScheme.primary,
                             ),
-                            Text(
-                              '-\$${cartService.discount} MXN',
-                              style: theme.textTheme.titleMedium?.copyWith(
-                                fontWeight: FontWeight.w600,
-                                color: AppColors.primaryGreen,
-                              ),
+                          ),
+                          Text(
+                            '-\$${cartService.discount} MXN',
+                            style: theme.textTheme.titleMedium?.copyWith(
+                              fontWeight: FontWeight.w600,
+                              color: theme.colorScheme.primary,
                             ),
-                          ],
-                        ),
+                          ),
+                        ],
+                      ),
                       ],
                       const Divider(height: 24, thickness: 1.5),
                       Row(
@@ -428,14 +429,14 @@ class _CartScreenState extends State<CartScreen> {
                             'Total',
                             style: theme.textTheme.titleLarge?.copyWith(
                               fontWeight: FontWeight.bold,
-                              color: AppColors.textDark,
+                              color: theme.colorScheme.onSurface,
                             ),
                           ),
                           Text(
                             '\$${cartService.total} MXN',
                             style: theme.textTheme.headlineSmall?.copyWith(
                               fontWeight: FontWeight.bold,
-                              color: AppColors.primaryRed,
+                              color: theme.colorScheme.secondary,
                             ),
                           ),
                         ],
@@ -455,7 +456,7 @@ class _CartScreenState extends State<CartScreen> {
                             );
                           },
                           style: ElevatedButton.styleFrom(
-                            backgroundColor: AppColors.primaryRed,
+                            backgroundColor: theme.colorScheme.secondary,
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(12),
                             ),
@@ -465,7 +466,7 @@ class _CartScreenState extends State<CartScreen> {
                             'Confirmar Pedido',
                             style: theme.textTheme.titleMedium?.copyWith(
                               fontWeight: FontWeight.bold,
-                              color: AppColors.white,
+                              color: theme.colorScheme.onSecondary,
                             ),
                           ),
                         ),

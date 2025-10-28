@@ -42,7 +42,7 @@ class _SplashScreenState extends State<SplashScreen> {
             end: Alignment.bottomCenter,
             colors: [
               AppColors.primaryGreen,
-              AppColors.accentTerracotta,
+              AppColors.primaryRed,
             ],
           ),
         ),

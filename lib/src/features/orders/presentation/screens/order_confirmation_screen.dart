@@ -39,9 +39,9 @@ class _OrderConfirmationScreenState extends State<OrderConfirmationScreen> {
         SnackBar(
           content: Text(
             'Por favor completa los datos obligatorios (*)',
-            style: TextStyle(fontWeight: FontWeight.bold, color: AppColors.white),
+            style: TextStyle(fontWeight: FontWeight.bold, color: Theme.of(context).colorScheme.onError),
           ),
-          backgroundColor: AppColors.primaryRed,
+          backgroundColor: Theme.of(context).colorScheme.error,
         ),
       );
       return;
@@ -68,19 +68,19 @@ class _OrderConfirmationScreenState extends State<OrderConfirmationScreen> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     return Scaffold(
-      backgroundColor: AppColors.backgroundBeige,
+      backgroundColor: theme.scaffoldBackgroundColor,
       appBar: AppBar(
         title: Text(
           'Confirmar Pedido',
           style: theme.textTheme.titleLarge?.copyWith(
             fontWeight: FontWeight.bold,
-            color: AppColors.primaryGreen,
+            color: theme.colorScheme.primary,
           ),
         ),
-        backgroundColor: AppColors.white,
+        backgroundColor: theme.colorScheme.surface,
         elevation: 1,
         leading: IconButton(
-          icon: Icon(Icons.arrow_back, color: AppColors.primaryGreen),
+          icon: Icon(Icons.arrow_back, color: theme.colorScheme.primary),
           onPressed: () => Navigator.pop(context),
         ),
       ),
@@ -94,7 +94,7 @@ class _OrderConfirmationScreenState extends State<OrderConfirmationScreen> {
               Container(
                 padding: const EdgeInsets.all(16),
                 decoration: BoxDecoration(
-                  color: AppColors.white,
+                  color: theme.colorScheme.surface,
                   borderRadius: BorderRadius.circular(12),
                   boxShadow: [
                     BoxShadow(
@@ -113,9 +113,9 @@ class _OrderConfirmationScreenState extends State<OrderConfirmationScreen> {
                         Text(
                           'Resumen del Pedido',
                           style: theme.textTheme.titleMedium?.copyWith(
-                            fontWeight: FontWeight.bold,
-                            color: AppColors.primaryGreen,
-                          ),
+                              fontWeight: FontWeight.bold,
+                              color: theme.colorScheme.primary,
+                            ),
                         ),
                         const SizedBox(height: 12),
                         ...items.map((item) {
@@ -148,7 +148,7 @@ class _OrderConfirmationScreenState extends State<OrderConfirmationScreen> {
                                   '\$${item.totalPrice} MXN',
                                   style: theme.textTheme.bodyMedium?.copyWith(
                                     fontWeight: FontWeight.bold,
-                                    color: AppColors.primaryRed,
+                                    color: theme.colorScheme.secondary,
                                   ),
                                 ),
                               ],
@@ -184,12 +184,12 @@ class _OrderConfirmationScreenState extends State<OrderConfirmationScreen> {
                             children: [
                               Row(
                                 children: [
-                                  Icon(Icons.local_offer, color: AppColors.primaryGreen, size: 16),
+                                  Icon(Icons.local_offer, color: theme.colorScheme.primary, size: 16),
                                   const SizedBox(width: 4),
                                   Text(
                                     'Descuento (${cartService.appliedCoupon!.code}):',
                                     style: theme.textTheme.bodyMedium?.copyWith(
-                                      color: AppColors.primaryGreen,
+                                      color: theme.colorScheme.primary,
                                     ),
                                   ),
                                 ],
@@ -198,7 +198,7 @@ class _OrderConfirmationScreenState extends State<OrderConfirmationScreen> {
                                 '-\$${cartService.discount} MXN',
                                 style: theme.textTheme.bodyMedium?.copyWith(
                                   fontWeight: FontWeight.w600,
-                                  color: AppColors.primaryGreen,
+                                  color: theme.colorScheme.primary,
                                 ),
                               ),
                             ],
@@ -208,8 +208,8 @@ class _OrderConfirmationScreenState extends State<OrderConfirmationScreen> {
                         Container(
                           padding: const EdgeInsets.all(12),
                           decoration: BoxDecoration(
-                            color: AppColors.backgroundBeige,
-                            borderRadius: BorderRadius.circular(8),
+                            color: theme.colorScheme.tertiary,
+                            borderRadius: BorderRadius.circular(AppTheme.radiusSmall),
                           ),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -218,14 +218,14 @@ class _OrderConfirmationScreenState extends State<OrderConfirmationScreen> {
                                 'Total:',
                                 style: theme.textTheme.titleMedium?.copyWith(
                                   fontWeight: FontWeight.bold,
-                                  color: AppColors.primaryGreen,
+                                  color: theme.colorScheme.primary,
                                 ),
                               ),
                               Text(
                                 '\$${cartService.total} MXN',
                                 style: theme.textTheme.titleLarge?.copyWith(
                                   fontWeight: FontWeight.bold,
-                                  color: AppColors.primaryRed,
+                                  color: theme.colorScheme.secondary,
                                 ),
                               ),
                             ],
@@ -242,18 +242,18 @@ class _OrderConfirmationScreenState extends State<OrderConfirmationScreen> {
               Container(
                 padding: const EdgeInsets.all(12),
                 decoration: BoxDecoration(
-                  color: AppColors.backgroundBeige,
-                  borderRadius: BorderRadius.circular(8),
+                  color: theme.colorScheme.tertiary,
+                  borderRadius: BorderRadius.circular(AppTheme.radiusSmall),
                 ),
                 child: Row(
                   children: [
-                    Icon(Icons.access_time, color: AppColors.primaryGreen, size: 20),
+                    Icon(Icons.access_time, color: theme.colorScheme.primary, size: 20),
                     const SizedBox(width: 8),
                     Text(
                       'Tiempo estimado: 25-35 min',
                       style: theme.textTheme.bodyMedium?.copyWith(
                         fontWeight: FontWeight.w600,
-                        color: AppColors.primaryGreen,
+                        color: theme.colorScheme.primary,
                       ),
                     ),
                   ],
@@ -266,7 +266,7 @@ class _OrderConfirmationScreenState extends State<OrderConfirmationScreen> {
                 'Dirección de Envío',
                 style: theme.textTheme.titleMedium?.copyWith(
                   fontWeight: FontWeight.bold,
-                  color: AppColors.primaryGreen,
+                  color: theme.colorScheme.primary,
                 ),
               ),
               const SizedBox(height: 12),
@@ -349,7 +349,7 @@ class _OrderConfirmationScreenState extends State<OrderConfirmationScreen> {
                 child: ElevatedButton(
                   onPressed: _isProcessingPayment ? null : _processPayment,
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: AppColors.primaryRed,
+                    backgroundColor: theme.colorScheme.secondary,
                     disabledBackgroundColor: theme.disabledColor,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(12),
@@ -361,7 +361,7 @@ class _OrderConfirmationScreenState extends State<OrderConfirmationScreen> {
                           height: 24,
                           width: 24,
                           child: CircularProgressIndicator(
-                            valueColor: AlwaysStoppedAnimation<Color>(AppColors.white),
+                            valueColor: AlwaysStoppedAnimation<Color>(theme.colorScheme.onSecondary),
                             strokeWidth: 2,
                           ),
                         )
@@ -369,7 +369,7 @@ class _OrderConfirmationScreenState extends State<OrderConfirmationScreen> {
                           'Procesar Pago',
                           style: theme.textTheme.titleMedium?.copyWith(
                             fontWeight: FontWeight.bold,
-                            color: AppColors.white,
+                            color: theme.colorScheme.onSecondary,
                           ),
                         ),
                 ),
@@ -380,12 +380,12 @@ class _OrderConfirmationScreenState extends State<OrderConfirmationScreen> {
               Container(
                 padding: const EdgeInsets.all(12),
                 decoration: BoxDecoration(
-                  color: AppColors.backgroundBeige,
-                  borderRadius: BorderRadius.circular(8),
+                  color: theme.colorScheme.tertiary,
+                  borderRadius: BorderRadius.circular(AppTheme.radiusSmall),
                 ),
                 child: Row(
                   children: [
-                    Icon(Icons.lock, color: AppColors.primaryGreen, size: 16),
+                    Icon(Icons.lock, color: theme.colorScheme.primary, size: 16),
                     const SizedBox(width: 8),
                     Expanded(
                       child: Text(

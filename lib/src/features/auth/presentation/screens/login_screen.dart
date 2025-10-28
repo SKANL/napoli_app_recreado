@@ -138,9 +138,17 @@ class _LoginScreenState extends State<LoginScreen> with SingleTickerProviderStat
                         color: colorScheme.primary,
                         borderRadius: BorderRadius.circular(20),
                         boxShadow: [
-                          BoxShadow(color: AppColors.accentTerracotta.withAlpha((0.12 * 255).round()), blurRadius: 12, spreadRadius: 1, offset: const Offset(0, 6)),
+                          BoxShadow(
+                            color: colorScheme.secondary.withAlpha((0.25 * 255).round()),
+                            blurRadius: 12,
+                            spreadRadius: 1,
+                            offset: const Offset(0, 6),
+                          ),
                         ],
-                        border: Border.all(color: AppColors.backgroundBeige.withAlpha((0.6 * 255).round()), width: 2),
+                        border: Border.all(
+                          color: AppColors.accentBeige.withAlpha((0.6 * 255).round()),
+                          width: 2,
+                        ),
                       ),
                       child: Icon(Icons.local_pizza, size: 56, color: colorScheme.onPrimary),
                     ),
@@ -235,9 +243,9 @@ class _LoginScreenState extends State<LoginScreen> with SingleTickerProviderStat
                                     children: [
                                       Expanded(child: _socialButtonColored(Icons.email_outlined, 'Google', AppColors.primaryGreen)),
                                       const SizedBox(width: 8),
-                                      Expanded(child: _socialButtonColored(Icons.facebook_outlined, 'Facebook', AppColors.accentTerracotta)),
+                                      Expanded(child: _socialButtonColored(Icons.facebook_outlined, 'Facebook', AppColors.primaryRed)),
                                       const SizedBox(width: 8),
-                                      Expanded(child: _socialButtonColored(Icons.apple, 'Apple', AppColors.primaryRed)),
+                                      Expanded(child: _socialButtonColored(Icons.apple, 'Apple', AppColors.textDark)),
                                     ],
                                   ),
                             ],
@@ -293,7 +301,7 @@ class _LoginScreenState extends State<LoginScreen> with SingleTickerProviderStat
               onTap: () {
                 ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Función de recuperar contraseña aún no implementada')));
               },
-              child: Text('¿Olvidaste tu contraseña?', style: theme.textTheme.bodySmall?.copyWith(color: AppColors.accentTerracotta)),
+              child: Text('¿Olvidaste tu contraseña?', style: theme.textTheme.bodySmall?.copyWith(color: colorScheme.secondary)),
             ),
           ),
           const SizedBox(height: 12),
@@ -306,7 +314,7 @@ class _LoginScreenState extends State<LoginScreen> with SingleTickerProviderStat
                   backgroundColor: AppColors.primaryGreen,
                   foregroundColor: colorScheme.onPrimary,
                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-                  side: BorderSide(color: AppColors.accentTerracotta.withAlpha((0.18 * 255).round())),
+                  side: BorderSide(color: AppColors.accentBeige.withAlpha((0.35 * 255).round())),
                   elevation: 3,
                 ),
                 onPressed: _loading ? null : _doSignIn,
@@ -435,12 +443,15 @@ class _LoginBackgroundPainter extends CustomPainter {
       ..shader = LinearGradient(
         begin: Alignment.topCenter,
         end: Alignment.bottomCenter,
-        colors: [colors.primary.withAlpha((0.92 * 255).round()), AppColors.backgroundBeige.withAlpha((0.95 * 255).round())],
+        colors: [
+          colors.primary.withAlpha((0.92 * 255).round()),
+          AppColors.accentBeigeLight.withAlpha((0.95 * 255).round()),
+        ],
       ).createShader(rect);
     canvas.drawRect(rect, basePaint);
 
     // Soft beige wave (lighter, blends into gradient)
-  final wavePaint = Paint()..color = AppColors.backgroundBeige.withAlpha(((0.85 - 0.12 * t) * 255).round());
+  final wavePaint = Paint()..color = AppColors.accentBeige.withAlpha(((0.85 - 0.12 * t) * 255).round());
     final path = Path();
     path.moveTo(0, h * 0.55 + (t - 0.5) * 30);
     path.quadraticBezierTo(w * 0.25, h * 0.45 + (t - 0.5) * 40, w * 0.5, h * 0.58 + (t - 0.5) * 30);
@@ -456,13 +467,13 @@ class _LoginBackgroundPainter extends CustomPainter {
     canvas.drawCircle(Offset(w * 0.14 + 40 * (t - 0.5), h * 0.16), r, circlePaint);
     canvas.drawCircle(Offset(w * 0.82 - 50 * (t - 0.5), h * 0.24), r * 0.7, circlePaint);
 
-    // Terracotta accent overlay (soft) to the top-right for warm contrast
-  final terracottaPaint = Paint()..color = AppColors.accentTerracotta.withAlpha(((0.06 + 0.04 * t) * 255).round());
+    // Warm accent overlay (soft) to the top-right for warm contrast
+  final accentPaint = Paint()..color = AppColors.fireOrange.withAlpha(((0.06 + 0.04 * t) * 255).round());
     final terrPath = Path();
     terrPath.moveTo(w * 0.78, h * 0.02 + 10 * t);
     terrPath.quadraticBezierTo(w * 0.92, h * 0.12 + 20 * t, w * 0.72, h * 0.22);
     terrPath.quadraticBezierTo(w * 0.62, h * 0.12, w * 0.78, h * 0.02 + 10 * t);
-    canvas.drawPath(terrPath, terracottaPaint);
+    canvas.drawPath(terrPath, accentPaint);
 
     // (Decorative pizza motif removed - left the rest of the composition intact)
 

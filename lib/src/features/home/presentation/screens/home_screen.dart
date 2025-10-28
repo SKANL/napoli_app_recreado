@@ -129,19 +129,28 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
                 child: Container(
                   height: 160,
                   decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(16),
+                    borderRadius: BorderRadius.circular(AppTheme.radiusMedium),
                     boxShadow: [
-                      BoxShadow(color: theme.shadowColor.withAlpha((0.08 * 255).round()), blurRadius: 12, offset: const Offset(0, 4)),
+                      BoxShadow(
+                        color: AppColors.black.withAlpha((0.12 * 255).round()),
+                        blurRadius: 16,
+                        offset: const Offset(0, 4),
+                      ),
                     ],
                   ),
                   child: ClipRRect(
-                    borderRadius: BorderRadius.circular(16),
+                    borderRadius: BorderRadius.circular(AppTheme.radiusMedium),
                     child: Container(
-                      decoration: BoxDecoration(
+                      decoration: const BoxDecoration(
+                        // Gradiente cálido de pizzería: naranja fuego → rojo CTA
                         gradient: LinearGradient(
                           begin: Alignment.topLeft,
                           end: Alignment.bottomRight,
-                          colors: [AppColors.primaryRed, AppColors.accentTerracotta],
+                          colors: [
+                            AppColors.fireOrange,
+                            AppColors.primaryRed,
+                            AppColors.toastedRed,
+                          ],
                         ),
                       ),
                       child: Center(
@@ -150,9 +159,34 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
                           children: [
                             Icon(Icons.local_offer, size: 44, color: AppColors.white),
                             const SizedBox(height: 10),
-                            Text('OFERTAS ESPECIALES', style: theme.textTheme.headlineSmall?.copyWith(color: AppColors.white, fontWeight: FontWeight.w800)),
+                            Text(
+                              'OFERTAS ESPECIALES',
+                              style: theme.textTheme.headlineSmall?.copyWith(
+                                color: AppColors.white,
+                                fontWeight: FontWeight.w800,
+                                shadows: [
+                                  Shadow(
+                                    color: AppColors.black.withAlpha((0.3 * 255).round()),
+                                    offset: const Offset(0, 2),
+                                    blurRadius: 4,
+                                  ),
+                                ],
+                              ),
+                            ),
                             const SizedBox(height: 6),
-                            Text('2x1 en pizzas seleccionadas', style: theme.textTheme.bodyMedium?.copyWith(color: AppColors.white)),
+                            Text(
+                              '2x1 en pizzas seleccionadas',
+                              style: theme.textTheme.bodyMedium?.copyWith(
+                                color: AppColors.white,
+                                shadows: [
+                                  Shadow(
+                                    color: AppColors.black.withAlpha((0.25 * 255).round()),
+                                    offset: const Offset(0, 1),
+                                    blurRadius: 3,
+                                  ),
+                                ],
+                              ),
+                            ),
                           ],
                         ),
                       ),
