@@ -245,23 +245,28 @@ class _CartScreenState extends State<CartScreen> {
                 ),
               ),
               // Resumen y botón de confirmar
-              Container(
-                padding: const EdgeInsets.all(20),
-                decoration: BoxDecoration(
-                  color: theme.colorScheme.surface,
-                  borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
-                  boxShadow: [
-                    BoxShadow(
-                      color: theme.shadowColor.withAlpha((0.1 * 255).round()),
-                      blurRadius: 10,
-                      offset: const Offset(0, -2),
-                    ),
-                  ],
-                ),
-                child: SafeArea(
-                  child: SingleChildScrollView(
-                    child: Column(
-                    children: [
+              // Use Flexible so the bottom summary can size itself within the
+              // Column and scroll internally when its content grows (coupon
+              // card, keyboard). This avoids pushing the whole Column and
+              // causing RenderFlex overflows on small devices.
+              Flexible(
+                child: Container(
+                  padding: const EdgeInsets.all(20),
+                  decoration: BoxDecoration(
+                    color: theme.colorScheme.surface,
+                    borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
+                    boxShadow: [
+                      BoxShadow(
+                        color: theme.shadowColor.withAlpha((0.1 * 255).round()),
+                        blurRadius: 10,
+                        offset: const Offset(0, -2),
+                      ),
+                    ],
+                  ),
+                  child: SafeArea(
+                    child: SingleChildScrollView(
+                      child: Column(
+                      children: [
                       // Tiempo estimado
                       Container(
                         padding: const EdgeInsets.all(12),
@@ -471,13 +476,14 @@ class _CartScreenState extends State<CartScreen> {
                           ),
                         ),
                       ),
-                    ],
-                    ),
-                  ),
-                ),
-              ),
-            ],
-          );
+                    ], // end Column children (summary content)
+                  ), // end Column
+                ), // end SingleChildScrollView
+              ), // end SafeArea
+            ), // end Container (inside ConstrainedBox)
+          ), // end ConstrainedBox
+        ], // end outer Column children (list + summary)
+      ); // end return Column
         },
       ),
     );
