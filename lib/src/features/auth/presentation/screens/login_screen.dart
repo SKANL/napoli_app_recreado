@@ -388,7 +388,11 @@ class _LoginScreenState extends State<LoginScreen> with SingleTickerProviderStat
         onPressed: () => ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('$label login coming soon!'))),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
-          children: [Icon(icon, size: 18), const SizedBox(width: 8), Text(label)],
+          children: [
+            Icon(icon, size: 18),
+            const SizedBox(width: 8),
+            Flexible(child: Text(label, overflow: TextOverflow.ellipsis)),
+          ],
         ),
       ),
     );
