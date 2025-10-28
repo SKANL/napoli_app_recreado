@@ -5,6 +5,8 @@ import 'scratch_card.dart';
 import 'confetti_widget.dart';
 import '../../services/coupon_history.service.dart';
 import '../../../features/coupons/presentation/screens/coupon_history_screen.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:napoli_app_v1/src/features/auth/presentation/screens/login_screen.dart';
 
 class AppHeader extends StatelessWidget {
   final String address;
@@ -139,14 +141,19 @@ class AppHeader extends StatelessWidget {
               backgroundColor: Theme.of(context).colorScheme.error,
               foregroundColor: Theme.of(context).colorScheme.onError,
             ),
-            onPressed: () {
+            onPressed: () async {
+              // Close the dialog first
               Navigator.pop(context);
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(
-                  content: Text('Sesión cerrada (UI-only)'),
-                  duration: Duration(seconds: 2),
-                ),
-              );
+              // Clear stored session flag (and any other session-related keys as needed)
+              final prefs = await SharedPreferences.getInstance();
+              await prefs.remove('is_logged_in');
+              // Navigate back to the login screen and remove previous routes
+              if (context.mounted) {
+                Navigator.of(context).pushAndRemoveUntil(
+                  MaterialPageRoute(builder: (_) => const LoginScreen()),
+                  (route) => false,
+                );
+              }
             },
             child: const Text('Cerrar Sesión'),
           ),
