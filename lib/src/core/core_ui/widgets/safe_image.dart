@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'dart:math' as math;
 
 /// Widget seguro para cargar imágenes con fallback automático
 class SafeImage extends StatelessWidget {
@@ -31,17 +32,24 @@ class SafeImage extends StatelessWidget {
             color: Theme.of(context).dividerColor.withAlpha((0.12 * 255).round()),
             borderRadius: BorderRadius.circular(12),
           ),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Icon(Icons.local_pizza, size: 48, color: Theme.of(context).colorScheme.onSurface.withAlpha((0.5 * 255).round())),
-              const SizedBox(height: 8),
-              Text(
-                'Pizza',
-                style: TextStyle(color: Theme.of(context).colorScheme.onSurface.withAlpha((0.7 * 255).round()), fontSize: 12),
-              ),
-            ],
-          ),
+          child: LayoutBuilder(builder: (context, constraints) {
+            // adapt sizes to available space to avoid RenderFlex overflow
+            final availableH = constraints.hasBoundedHeight && constraints.maxHeight > 0 ? constraints.maxHeight : (height ?? 64.0);
+            final iconSize = math.min(48.0, math.max(12.0, availableH * 0.55));
+            final gap = math.max(4.0, availableH * 0.06);
+            final fontSize = math.min(12.0, math.max(10.0, availableH * 0.18));
+            return Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(Icons.local_pizza, size: iconSize, color: Theme.of(context).colorScheme.onSurface.withAlpha((0.5 * 255).round())),
+                SizedBox(height: gap),
+                Text(
+                  'Pizza',
+                  style: TextStyle(color: Theme.of(context).colorScheme.onSurface.withAlpha((0.7 * 255).round()), fontSize: fontSize),
+                ),
+              ],
+            );
+          }),
         );
       },
     );
