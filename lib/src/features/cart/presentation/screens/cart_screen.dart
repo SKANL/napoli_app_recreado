@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
-import 'package:napoli_app_v1/src/core/core_ui/widgets/app_scaffold.dart';
+import 'package:napoli_app_v1/src/core/core_ui/theme.dart';
 import 'package:napoli_app_v1/src/di.dart';
 import 'package:napoli_app_v1/src/core/services/cart.service.dart';
+import 'package:napoli_app_v1/src/core/core_domain/entities/coupon.dart';
+import 'package:napoli_app_v1/src/features/orders/presentation/screens/order_confirmation_screen.dart';
 
 class CartScreen extends StatefulWidget {
   const CartScreen({super.key});
@@ -13,40 +15,6 @@ class CartScreen extends StatefulWidget {
 
 class _CartScreenState extends State<CartScreen> {
   final TextEditingController _couponController = TextEditingController();
-  double _discount = 0;
-  String? _appliedCoupon;
-
-  // Mock discount codes
-  final Map<String, double> _discountCodes = {
-    'PIZZA10': 10,
-    'SAVE20': 20,
-    'MEGA50': 50,
-  };
-
-  void _applyCoupon() {
-    final code = _couponController.text.toUpperCase();
-    if (_discountCodes.containsKey(code)) {
-      setState(() {
-        _discount = _discountCodes[code]!;
-        _appliedCoupon = code;
-      });
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Coupon "$code" applied! ${_discount.toInt()}% off')),
-      );
-    } else {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Invalid coupon code')),
-      );
-    }
-  }
-
-  void _removeCoupon() {
-    setState(() {
-      _discount = 0;
-      _appliedCoupon = null;
-      _couponController.clear();
-    });
-  }
 
   @override
   void dispose() {
@@ -54,176 +22,462 @@ class _CartScreenState extends State<CartScreen> {
     super.dispose();
   }
 
+  void _applyCoupon() {
+    final code = _couponController.text.trim();
+    if (code.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Por favor ingresa un código de cupón')),
+      );
+      return;
+    }
+
+    final coupon = Coupon.fromCode(code);
+    if (coupon == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Cupón "$code" no válido'),
+          backgroundColor: AppColors.primaryRed,
+        ),
+      );
+      return;
+    }
+
+    cartService.applyCoupon(coupon);
+    _couponController.clear();
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text('Cupón ${coupon.code} aplicado: ${coupon.description}'),
+        backgroundColor: AppColors.primaryGreen,
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
-    return AppScaffold(
-      body: Column(
-        children: [
-          // Header
-          AppBar(
-            title: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const Text('Your', style: TextStyle(fontSize: 16)),
-                Text('Cart', style: TextStyle(fontSize: 28, color: Theme.of(context).colorScheme.primary, fontWeight: FontWeight.bold)),
-              ],
-            ),
+    final theme = Theme.of(context);
+    return Scaffold(
+      backgroundColor: AppColors.backgroundBeige,
+      appBar: AppBar(
+        title: Text(
+          'Mi Carrito',
+          style: theme.textTheme.titleLarge?.copyWith(
+            fontWeight: FontWeight.bold,
+            color: AppColors.textDark,
           ),
-          // Cart items
-          Expanded(
-            child: ValueListenableBuilder<List<CartItem>>(
-              valueListenable: cartService,
-              builder: (context, items, _) {
-                if (items.isEmpty) {
-                  return Center(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Lottie.asset(
-                          'assets/animation/eating.json',
-                          width: 250,
-                          height: 250,
-                          fit: BoxFit.contain,
-                        ),
-                        const SizedBox(height: 16),
-                        Text(
-                          'Tu carrito está vacío',
-                          style: TextStyle(
-                            fontSize: 20,
-                            fontWeight: FontWeight.bold,
-                            color: Theme.of(context).colorScheme.onSurface.withAlpha((0.75 * 255).round()),
-                          ),
-                        ),
-                        const SizedBox(height: 8),
-                        Text(
-                          '¡Agrega deliciosas pizzas!',
-                          style: TextStyle(fontSize: 14, color: Theme.of(context).colorScheme.onSurface.withAlpha((0.7 * 255).round())),
-                        ),
-                      ],
+        ),
+        backgroundColor: AppColors.backgroundBeige,
+        elevation: 1,
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back, color: AppColors.textDark),
+          onPressed: () => Navigator.pop(context),
+        ),
+      ),
+      body: ValueListenableBuilder<List<CartItem>>(
+        valueListenable: cartService,
+        builder: (context, items, child) {
+          if (items.isEmpty) {
+            return Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Lottie.asset(
+                    'assets/animation/eating.json',
+                    width: 250,
+                    height: 250,
+                    fit: BoxFit.contain,
+                  ),
+                  const SizedBox(height: 16),
+                  Text(
+                    'Tu carrito está vacío',
+                    style: theme.textTheme.titleLarge?.copyWith(
+                      fontWeight: FontWeight.bold,
+                      color: theme.colorScheme.onSurface.withAlpha((0.75 * 255).round()),
                     ),
-                  );
-                }
-                return ListView.builder(
+                  ),
+                  const SizedBox(height: 8),
+                  Text(
+                    '¡Agrega deliciosas pizzas!',
+                    style: theme.textTheme.bodyMedium?.copyWith(
+                      color: theme.colorScheme.onSurface.withAlpha((0.7 * 255).round()),
+                    ),
+                  ),
+                  const SizedBox(height: 30),
+                  ElevatedButton(
+                    onPressed: () => Navigator.pop(context),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: AppColors.primaryRed,
+                      padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 16),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                    ),
+                    child: Text(
+                      'Explorar menú',
+                      style: theme.textTheme.titleMedium?.copyWith(
+                        fontWeight: FontWeight.bold,
+                        color: AppColors.white,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            );
+          }
+
+          return Column(
+            children: [
+              // Lista de items
+              Expanded(
+                child: ListView.builder(
+                  padding: const EdgeInsets.all(16),
                   itemCount: items.length,
                   itemBuilder: (context, index) {
-                    final it = items[index];
-                    return Card(
-                      margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-                      child: ListTile(
-                        leading: CircleAvatar(
-                          backgroundImage: AssetImage(it.image),
-                          backgroundColor: Theme.of(context).dividerColor.withAlpha((0.12 * 255).round()),
-                        ),
-                        title: Text(it.name, style: const TextStyle(fontWeight: FontWeight.bold)),
-                        subtitle: Text('Size: ${it.size} • \$${it.price} MXN'),
-                        trailing: IconButton(
-                          onPressed: () => cartService.removeItem(it.id),
-                          icon: Icon(Icons.delete, color: Theme.of(context).colorScheme.error),
-                        ),
+                    final item = items[index];
+                    return Container(
+                      margin: const EdgeInsets.only(bottom: 16),
+                      padding: const EdgeInsets.all(16),
+                      decoration: BoxDecoration(
+                        color: AppColors.white,
+                        borderRadius: BorderRadius.circular(12),
+                        boxShadow: [
+                          BoxShadow(
+                            color: theme.shadowColor.withAlpha((0.05 * 255).round()),
+                            blurRadius: 8,
+                            offset: const Offset(0, 2),
+                          ),
+                        ],
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Row(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              // Icono del producto
+                              Container(
+                                width: 70,
+                                height: 70,
+                                decoration: BoxDecoration(
+                                  color: AppColors.backgroundBeige,
+                                  borderRadius: BorderRadius.circular(8),
+                                ),
+                                child: Icon(
+                                  Icons.restaurant_menu,
+                                  color: AppColors.primaryRed,
+                                  size: 35,
+                                ),
+                              ),
+                              const SizedBox(width: 16),
+                              // Información del producto
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      item.name,
+                                      style: theme.textTheme.titleMedium?.copyWith(
+                                        fontWeight: FontWeight.bold,
+                                        color: AppColors.primaryGreen,
+                                      ),
+                                    ),
+                                    if (item.selectedExtras.isNotEmpty) ...[
+                                      const SizedBox(height: 6),
+                                      Text(
+                                        'Extras: ${item.selectedExtras.map((e) => e.name).join(", ")}',
+                                        style: theme.textTheme.bodySmall?.copyWith(
+                                          color: theme.colorScheme.onSurface.withAlpha((0.6 * 255).round()),
+                                        ),
+                                      ),
+                                    ],
+                                    const SizedBox(height: 8),
+                                    Text(
+                                      '\$${item.totalPrice} MXN',
+                                      style: theme.textTheme.titleMedium?.copyWith(
+                                        fontWeight: FontWeight.bold,
+                                        color: AppColors.primaryRed,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              // Botón eliminar
+                              IconButton(
+                                icon: const Icon(Icons.delete_outline),
+                                color: theme.colorScheme.onSurface.withAlpha((0.6 * 255).round()),
+                                onPressed: () => cartService.removeItem(item.id),
+                              ),
+                            ],
+                          ),
+                          const SizedBox(height: 12),
+                          // Controles de cantidad
+                          Row(
+                            children: [
+                              IconButton(
+                                onPressed: () => cartService.updateQuantity(index, item.quantity - 1),
+                                icon: const Icon(Icons.remove_circle_outline),
+                                color: AppColors.primaryRed,
+                              ),
+                              Container(
+                                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
+                                decoration: BoxDecoration(
+                                  border: Border.all(color: theme.dividerColor),
+                                  borderRadius: BorderRadius.circular(8),
+                                ),
+                                child: Text(
+                                  '${item.quantity}',
+                                  style: theme.textTheme.titleMedium?.copyWith(
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ),
+                              IconButton(
+                                onPressed: () => cartService.updateQuantity(index, item.quantity + 1),
+                                icon: const Icon(Icons.add_circle_outline),
+                                color: AppColors.primaryRed,
+                              ),
+                            ],
+                          ),
+                        ],
                       ),
                     );
                   },
-                );
-              },
-            ),
-          ),
-          // Coupon section
-          Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                Row(
-                  children: [
-                    Expanded(
-                      child: TextField(
-                        controller: _couponController,
-                        decoration: const InputDecoration(
-                          labelText: 'Coupon Code',
-                          border: OutlineInputBorder(),
-                          hintText: 'Enter discount code',
-                        ),
-                        textCapitalization: TextCapitalization.characters,
-                      ),
-                    ),
-                    const SizedBox(width: 8),
-                    ElevatedButton(
-                      onPressed: _applyCoupon,
-                      child: const Text('Apply'),
+                ),
+              ),
+              // Resumen y botón de confirmar
+              Container(
+                padding: const EdgeInsets.all(20),
+                decoration: BoxDecoration(
+                  color: AppColors.backgroundBeige,
+                  borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
+                  boxShadow: [
+                    BoxShadow(
+                      color: theme.shadowColor.withAlpha((0.1 * 255).round()),
+                      blurRadius: 10,
+                      offset: const Offset(0, -2),
                     ),
                   ],
                 ),
-                if (_appliedCoupon != null)
-                  Padding(
-                    padding: const EdgeInsets.only(top: 8.0),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text('Coupon "$_appliedCoupon" applied ($_discount% off)', style: TextStyle(color: Theme.of(context).colorScheme.primary)),
-                        TextButton(onPressed: _removeCoupon, child: const Text('Remove')),
-                      ],
-                    ),
-                  ),
-                const SizedBox(height: 16),
-                // Total & Checkout
-                ValueListenableBuilder<List<CartItem>>(
-                  valueListenable: cartService,
-                  builder: (context, items, _) {
-                    final subtotal = cartService.total;
-                    final discountAmount = (subtotal * _discount / 100).round();
-                    final total = subtotal - discountAmount;
-                    return Column(
-                      children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                child: SafeArea(
+                  child: SingleChildScrollView(
+                    child: Column(
+                    children: [
+                      // Tiempo estimado
+                      Container(
+                        padding: const EdgeInsets.all(12),
+                        decoration: BoxDecoration(
+                          color: AppColors.white,
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        child: Row(
                           children: [
-                            const Text('Subtotal:', style: TextStyle(fontSize: 16)),
-                            Text('\$$subtotal MXN', style: const TextStyle(fontSize: 16)),
+                            Icon(Icons.access_time, color: AppColors.textDark, size: 20),
+                            const SizedBox(width: 8),
+                            Text(
+                              'Tiempo estimado: 25-35 min',
+                              style: theme.textTheme.bodyMedium?.copyWith(
+                                fontWeight: FontWeight.w600,
+                                color: AppColors.textDark,
+                              ),
+                            ),
                           ],
                         ),
-                        if (_discount > 0)
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      ),
+                      const SizedBox(height: 16),
+                      // Campo de cupón
+                      Container(
+                        padding: const EdgeInsets.all(12),
+                        decoration: BoxDecoration(
+                          color: AppColors.white,
+                          borderRadius: BorderRadius.circular(8),
+                          border: Border.all(color: theme.dividerColor),
+                        ),
+                        child: Row(
+                          children: [
+                            Expanded(
+                              child: TextField(
+                                controller: _couponController,
+                                decoration: InputDecoration(
+                                  hintText: 'Código de cupón',
+                                  hintStyle: theme.textTheme.bodyMedium?.copyWith(
+                                    color: theme.colorScheme.onSurface.withAlpha((0.4 * 255).round()),
+                                  ),
+                                  border: InputBorder.none,
+                                  contentPadding: EdgeInsets.zero,
+                                ),
+                                textCapitalization: TextCapitalization.characters,
+                              ),
+                            ),
+                            const SizedBox(width: 8),
+                            TextButton(
+                              onPressed: _applyCoupon,
+                              style: TextButton.styleFrom(
+                                backgroundColor: AppColors.primaryGreen,
+                                foregroundColor: AppColors.white,
+                                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(6),
+                                ),
+                              ),
+                              child: const Text('Aplicar'),
+                            ),
+                          ],
+                        ),
+                      ),
+                      if (cartService.appliedCoupon != null) ...[
+                        const SizedBox(height: 8),
+                        Container(
+                          padding: const EdgeInsets.all(12),
+                          decoration: BoxDecoration(
+                            color: AppColors.primaryGreen.withAlpha((0.1 * 255).round()),
+                            borderRadius: BorderRadius.circular(8),
+                            border: Border.all(
+                              color: AppColors.primaryGreen.withAlpha((0.3 * 255).round()),
+                            ),
+                          ),
+                          child: Row(
                             children: [
-                              Text('Discount:', style: TextStyle(fontSize: 16, color: Theme.of(context).colorScheme.primary)),
-                              Text('-\$$discountAmount MXN', style: TextStyle(fontSize: 16, color: Theme.of(context).colorScheme.primary)),
+                              Icon(Icons.local_offer, color: AppColors.primaryGreen, size: 20),
+                              const SizedBox(width: 8),
+                              Expanded(
+                                child: Text(
+                                  '${cartService.appliedCoupon!.code} aplicado: ${cartService.appliedCoupon!.description}',
+                                  style: theme.textTheme.bodyMedium?.copyWith(
+                                    fontWeight: FontWeight.w600,
+                                    color: AppColors.primaryGreen,
+                                  ),
+                                ),
+                              ),
+                              IconButton(
+                                icon: Icon(Icons.close, color: AppColors.primaryGreen, size: 18),
+                                padding: EdgeInsets.zero,
+                                constraints: const BoxConstraints(),
+                                onPressed: () {
+                                  cartService.removeCoupon();
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    const SnackBar(content: Text('Cupón eliminado')),
+                                  );
+                                },
+                              ),
                             ],
                           ),
-                        const Divider(thickness: 2),
+                        ),
+                      ],
+                      const SizedBox(height: 16),
+                      // Resumen financiero
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            'Subtotal',
+                            style: theme.textTheme.titleMedium?.copyWith(
+                              color: theme.colorScheme.onSurface.withAlpha((0.7 * 255).round()),
+                            ),
+                          ),
+                          Text(
+                            '\$${cartService.subtotal} MXN',
+                            style: theme.textTheme.titleMedium?.copyWith(
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 8),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            'Costo de envío',
+                            style: theme.textTheme.titleMedium?.copyWith(
+                              color: theme.colorScheme.onSurface.withAlpha((0.7 * 255).round()),
+                            ),
+                          ),
+                          Text(
+                            '\$${cartService.deliveryFee} MXN',
+                            style: theme.textTheme.titleMedium?.copyWith(
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                        ],
+                      ),
+                      if (cartService.discount > 0) ...[
+                        const SizedBox(height: 8),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            const Text('Total:', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
-                            Text('\$$total MXN', style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+                            Text(
+                              'Descuento',
+                              style: theme.textTheme.titleMedium?.copyWith(
+                                color: AppColors.primaryGreen,
+                              ),
+                            ),
+                            Text(
+                              '-\$${cartService.discount} MXN',
+                              style: theme.textTheme.titleMedium?.copyWith(
+                                fontWeight: FontWeight.w600,
+                                color: AppColors.primaryGreen,
+                              ),
+                            ),
                           ],
                         ),
-                        const SizedBox(height: 16),
-                        SizedBox(
-                          width: double.infinity,
-                          child: ElevatedButton(
-                            style: ElevatedButton.styleFrom(
-                              padding: const EdgeInsets.symmetric(vertical: 16),
-                              backgroundColor: Theme.of(context).colorScheme.primary,
-                              foregroundColor: Theme.of(context).colorScheme.onPrimary,
+                      ],
+                      const Divider(height: 24, thickness: 1.5),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            'Total',
+                            style: theme.textTheme.titleLarge?.copyWith(
+                              fontWeight: FontWeight.bold,
+                              color: AppColors.textDark,
                             ),
-                            onPressed: items.isEmpty
-                                ? null
-                                : () {
-                                    ScaffoldMessenger.of(context).showSnackBar(
-                                      const SnackBar(content: Text('Checkout functionality - UI only')),
-                                    );
-                                  },
-                            child: const Text('Proceed to Checkout', style: TextStyle(fontSize: 18)),
+                          ),
+                          Text(
+                            '\$${cartService.total} MXN',
+                            style: theme.textTheme.headlineSmall?.copyWith(
+                              fontWeight: FontWeight.bold,
+                              color: AppColors.primaryRed,
+                            ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 20),
+                      // Botón confirmar pedido
+                      SizedBox(
+                        width: double.infinity,
+                        height: 56,
+                        child: ElevatedButton(
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => const OrderConfirmationScreen(),
+                              ),
+                            );
+                          },
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: AppColors.primaryRed,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                            elevation: 2,
+                          ),
+                          child: Text(
+                            'Confirmar Pedido',
+                            style: theme.textTheme.titleMedium?.copyWith(
+                              fontWeight: FontWeight.bold,
+                              color: AppColors.white,
+                            ),
                           ),
                         ),
-                      ],
-                    );
-                  },
+                      ),
+                    ],
+                    ),
+                  ),
                 ),
-              ],
-            ),
-          ),
-        ],
+              ),
+            ],
+          );
+        },
       ),
     );
   }
