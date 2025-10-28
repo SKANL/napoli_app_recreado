@@ -135,7 +135,7 @@ class _LoginScreenState extends State<LoginScreen> with SingleTickerProviderStat
                       width: 110,
                       height: 110,
                       decoration: BoxDecoration(
-                        color: colorScheme.primary,
+                        color: AppColors.white,
                         borderRadius: BorderRadius.circular(20),
                         boxShadow: [
                           BoxShadow(
@@ -146,11 +146,20 @@ class _LoginScreenState extends State<LoginScreen> with SingleTickerProviderStat
                           ),
                         ],
                         border: Border.all(
-                          color: AppColors.accentBeige.withAlpha((0.6 * 255).round()),
+                          color: AppColors.primaryRed.withAlpha((0.6 * 255).round()),
                           width: 2,
                         ),
                       ),
-                      child: Icon(Icons.local_pizza, size: 56, color: colorScheme.onPrimary),
+                      child: Padding(
+                        padding: const EdgeInsets.all(12.0),
+                        child: Image.asset(
+                          'assets/images/logo_fondo_blanco-transpa.png',
+                          fit: BoxFit.contain,
+                          // constrain the image so it visually matches the previous icon size
+                          width: 56,
+                          height: 56,
+                        ),
+                      ),
                     ),
                   ),
                   const SizedBox(height: 18),
