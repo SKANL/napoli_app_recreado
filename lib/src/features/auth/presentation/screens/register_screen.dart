@@ -3,6 +3,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:napoli_app_v1/src/core/core_ui/widgets/app_scaffold.dart';
 import 'package:napoli_app_v1/src/core/core_ui/theme.dart';
 import 'package:napoli_app_v1/src/features/home/presentation/screens/home_screen.dart';
+import 'package:napoli_app_v1/l10n/arb/app_localizations.dart';
 
 /// Simple standalone Register screen. The app's primary login UI uses the
 /// combined tabbed screen but this file provides an independent registration
@@ -34,7 +35,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
   Future<void> _register() async {
     if (!_formKey.currentState!.validate()) return;
     if (_passwordCtrl.text != _confirmCtrl.text) {
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Las contraseñas no coinciden')));
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(AppLocalizations.of(context)!.passwordsDoNotMatch),
+        ),
+      );
       return;
     }
     setState(() => _loading = true);
@@ -43,18 +48,23 @@ class _RegisterScreenState extends State<RegisterScreen> {
     await prefs.setBool('is_logged_in', true);
     if (!mounted) return;
     setState(() => _loading = false);
-    Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (_) => const HomeScreen()));
+    Navigator.of(
+      context,
+    ).pushReplacement(MaterialPageRoute(builder: (_) => const HomeScreen()));
   }
 
   String? _emailValidator(String? v) {
-    if (v == null || v.isEmpty) return 'Ingresa tu correo';
-    if (!RegExp(r"^[\w-.]+@([\w-]+\.)+[\w-]{2,4}").hasMatch(v)) return 'Correo inválido';
+    if (v == null || v.isEmpty)
+      return AppLocalizations.of(context)!.emailRequired;
+    if (!RegExp(r"^[\w-.]+@([\w-]+\.)+[\w-]{2,4}").hasMatch(v))
+      return AppLocalizations.of(context)!.emailInvalid;
     return null;
   }
 
   String? _passwordValidator(String? v) {
-    if (v == null || v.isEmpty) return 'Ingresa tu contraseña';
-    if (v.length < 6) return 'Mínimo 6 caracteres';
+    if (v == null || v.isEmpty)
+      return AppLocalizations.of(context)!.enterPassword;
+    if (v.length < 6) return AppLocalizations.of(context)!.passwordMinLength;
     return null;
   }
 
@@ -72,21 +82,60 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 children: [
                   BackButton(),
                   const SizedBox(width: 8),
-                  const Text('Registrarse', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700)),
+                  Text(
+                    AppLocalizations.of(context)!.registerScreenTitle,
+                    style: const TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.w700,
+                    ),
+                  ),
                 ],
               ),
             ),
             Form(
-          key: _formKey,
+              key: _formKey,
               child: Column(
                 children: [
-                  TextFormField(controller: _nameCtrl, decoration: const InputDecoration(labelText: 'Nombre completo'), validator: (v) => v == null || v.isEmpty ? 'Ingresa tu nombre' : null),
+                  TextFormField(
+                    controller: _nameCtrl,
+                    decoration: InputDecoration(
+                      labelText: AppLocalizations.of(context)!.nameLabel,
+                    ),
+                    validator: (v) => v == null || v.isEmpty
+                        ? AppLocalizations.of(context)!.nameRequired
+                        : null,
+                  ),
                   const SizedBox(height: 8),
-                  TextFormField(controller: _emailCtrl, decoration: const InputDecoration(labelText: 'Email'), keyboardType: TextInputType.emailAddress, validator: _emailValidator),
+                  TextFormField(
+                    controller: _emailCtrl,
+                    decoration: InputDecoration(
+                      labelText: AppLocalizations.of(context)!.emailLabel,
+                    ),
+                    keyboardType: TextInputType.emailAddress,
+                    validator: _emailValidator,
+                  ),
                   const SizedBox(height: 8),
-                  TextFormField(controller: _passwordCtrl, decoration: const InputDecoration(labelText: 'Contraseña'), obscureText: true, validator: _passwordValidator),
+                  TextFormField(
+                    controller: _passwordCtrl,
+                    decoration: InputDecoration(
+                      labelText: AppLocalizations.of(context)!.passwordLabel,
+                    ),
+                    obscureText: true,
+                    validator: _passwordValidator,
+                  ),
                   const SizedBox(height: 8),
-                  TextFormField(controller: _confirmCtrl, decoration: const InputDecoration(labelText: 'Confirmar contraseña'), obscureText: true, validator: (v) => v == null || v.isEmpty ? 'Confirma tu contraseña' : null),
+                  TextFormField(
+                    controller: _confirmCtrl,
+                    decoration: InputDecoration(
+                      labelText: AppLocalizations.of(
+                        context,
+                      )!.confirmPasswordLabel,
+                    ),
+                    obscureText: true,
+                    validator: (v) => v == null || v.isEmpty
+                        ? AppLocalizations.of(context)!.confirmPasswordRequired
+                        : null,
+                  ),
                   const SizedBox(height: 16),
                   SizedBox(
                     width: double.infinity,
@@ -96,12 +145,20 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         style: ElevatedButton.styleFrom(
                           backgroundColor: AppColors.primaryGreen,
                           foregroundColor: AppColors.white,
-                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-                          side: BorderSide(color: AppColors.accentBeige.withAlpha((0.35 * 255).round())),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          side: BorderSide(
+                            color: AppColors.accentBeige.withAlpha(
+                              (0.35 * 255).round(),
+                            ),
+                          ),
                           elevation: 3,
                         ),
                         onPressed: _loading ? null : _register,
-                        child: _loading ? const CircularProgressIndicator() : const Text('CREAR CUENTA'),
+                        child: _loading
+                            ? const CircularProgressIndicator()
+                            : Text(AppLocalizations.of(context)!.createAccount),
                       ),
                     ),
                   ),

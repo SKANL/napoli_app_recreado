@@ -1,9 +1,12 @@
 import 'dart:async';
+import 'package:go_router/go_router.dart';
 import 'package:flutter/material.dart';
 import 'package:napoli_app_v1/src/core/core_ui/theme.dart';
 import 'package:napoli_app_v1/src/core/core_ui/widgets/order_stepper.dart';
+import 'package:napoli_app_v1/src/features/cart/presentation/cubit/cart_cubit.dart';
 import 'package:napoli_app_v1/src/di.dart';
-import 'package:napoli_app_v1/src/features/home/presentation/screens/home_screen.dart';
+
+import 'package:napoli_app_v1/l10n/arb/app_localizations.dart';
 
 class OrderPlacedScreen extends StatefulWidget {
   const OrderPlacedScreen({super.key});
@@ -36,13 +39,12 @@ class _OrderPlacedScreenState extends State<OrderPlacedScreen> {
   }
 
   void _showRatingDialog() {
+    final l10n = AppLocalizations.of(context)!;
     showDialog(
       context: context,
       barrierDismissible: false,
       builder: (context) => AlertDialog(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(16),
-        ),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
         title: Column(
           children: [
             Icon(
@@ -52,7 +54,7 @@ class _OrderPlacedScreenState extends State<OrderPlacedScreen> {
             ),
             const SizedBox(height: 12),
             Text(
-              '¡Pedido Entregado!',
+              l10n.orderDelivered,
               style: Theme.of(context).textTheme.titleLarge?.copyWith(
                 fontWeight: FontWeight.bold,
                 color: Theme.of(context).colorScheme.primary,
@@ -65,9 +67,11 @@ class _OrderPlacedScreenState extends State<OrderPlacedScreen> {
           mainAxisSize: MainAxisSize.min,
           children: [
             Text(
-              '¿Cómo fue tu experiencia?',
+              l10n.rateExperience,
               style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                color: Theme.of(context).colorScheme.onSurface.withAlpha((0.7 * 255).round()),
+                color: Theme.of(
+                  context,
+                ).colorScheme.onSurface.withAlpha((0.7 * 255).round()),
               ),
               textAlign: TextAlign.center,
             ),
@@ -101,9 +105,11 @@ class _OrderPlacedScreenState extends State<OrderPlacedScreen> {
               _finishOrder();
             },
             child: Text(
-              'Más tarde',
+              l10n.later,
               style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                color: Theme.of(context).colorScheme.onSurface.withAlpha((0.6 * 255).round()),
+                color: Theme.of(
+                  context,
+                ).colorScheme.onSurface.withAlpha((0.6 * 255).round()),
               ),
             ),
           ),
@@ -114,12 +120,9 @@ class _OrderPlacedScreenState extends State<OrderPlacedScreen> {
 
   void _finishOrder() {
     // Limpiamos el carrito antes de volver a la pantalla principal
-    cartService.clear();
+    getIt<CartCubit>().clearCart();
 
-    Navigator.of(context).pushAndRemoveUntil(
-      MaterialPageRoute(builder: (context) => const HomeScreen()),
-      (route) => false,
-    );
+    context.go('/home');
   }
 
   @override
@@ -131,11 +134,12 @@ class _OrderPlacedScreenState extends State<OrderPlacedScreen> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final l10n = AppLocalizations.of(context)!;
     return Scaffold(
       backgroundColor: theme.scaffoldBackgroundColor,
       appBar: AppBar(
         title: Text(
-          'Estado del Pedido',
+          l10n.orderStatus,
           style: theme.textTheme.titleLarge?.copyWith(
             fontWeight: FontWeight.bold,
             color: theme.colorScheme.primary,
@@ -150,19 +154,25 @@ class _OrderPlacedScreenState extends State<OrderPlacedScreen> {
               context: context,
               builder: (context) => AlertDialog(
                 title: Text(
-                  '¿Salir del seguimiento?',
-                  style: theme.textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold),
+                  l10n.exitTracking,
+                  style: theme.textTheme.titleLarge?.copyWith(
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
                 content: Text(
-                  'Tu pedido seguirá en proceso. Puedes volver en cualquier momento.',
+                  l10n.exitTrackingMessage,
                   style: theme.textTheme.bodyMedium,
                 ),
                 actions: [
                   TextButton(
                     onPressed: () => Navigator.pop(context),
                     child: Text(
-                      'Cancelar',
-                      style: TextStyle(color: theme.colorScheme.onSurface.withAlpha((0.6 * 255).round())),
+                      l10n.cancel,
+                      style: TextStyle(
+                        color: theme.colorScheme.onSurface.withAlpha(
+                          (0.6 * 255).round(),
+                        ),
+                      ),
                     ),
                   ),
                   TextButton(
@@ -171,7 +181,7 @@ class _OrderPlacedScreenState extends State<OrderPlacedScreen> {
                       _finishOrder();
                     },
                     child: Text(
-                      'Salir',
+                      l10n.exit,
                       style: TextStyle(
                         color: theme.colorScheme.secondary,
                         fontWeight: FontWeight.bold,
@@ -206,7 +216,10 @@ class _OrderPlacedScreenState extends State<OrderPlacedScreen> {
                   const SizedBox(width: 12),
                   Flexible(
                     child: Text(
-                      'Pedido #${DateTime.now().millisecondsSinceEpoch % 10000}',
+                      l10n.orderNumber(
+                        (DateTime.now().millisecondsSinceEpoch % 10000)
+                            .toString(),
+                      ),
                       style: theme.textTheme.titleMedium?.copyWith(
                         fontWeight: FontWeight.bold,
                         color: theme.colorScheme.primary,
@@ -243,9 +256,11 @@ class _OrderPlacedScreenState extends State<OrderPlacedScreen> {
                           ),
                           const SizedBox(height: 12),
                           Text(
-                            'Mapa en tiempo real',
+                            l10n.realTimeMap,
                             style: theme.textTheme.titleMedium?.copyWith(
-                              color: theme.colorScheme.onSurface.withAlpha((0.6 * 255).round()),
+                              color: theme.colorScheme.onSurface.withAlpha(
+                                (0.6 * 255).round(),
+                              ),
                             ),
                           ),
                         ],
@@ -262,7 +277,9 @@ class _OrderPlacedScreenState extends State<OrderPlacedScreen> {
                           borderRadius: BorderRadius.circular(10),
                           boxShadow: [
                             BoxShadow(
-                              color: theme.shadowColor.withAlpha((0.1 * 255).round()),
+                              color: theme.shadowColor.withAlpha(
+                                (0.1 * 255).round(),
+                              ),
                               blurRadius: 8,
                             ),
                           ],
@@ -288,9 +305,10 @@ class _OrderPlacedScreenState extends State<OrderPlacedScreen> {
                                     ),
                                   ),
                                   Text(
-                                    'Tu repartidor',
+                                    l10n.yourDeliveryMan,
                                     style: theme.textTheme.bodySmall?.copyWith(
-                                      color: theme.colorScheme.onSurface.withAlpha((0.6 * 255).round()),
+                                      color: theme.colorScheme.onSurface
+                                          .withAlpha((0.6 * 255).round()),
                                     ),
                                   ),
                                 ],
@@ -314,14 +332,16 @@ class _OrderPlacedScreenState extends State<OrderPlacedScreen> {
               padding: const EdgeInsets.symmetric(horizontal: 40),
               child: Text(
                 _currentStep == 0
-                    ? '¡Gracias por tu pedido! Estamos trabajando en ello.'
+                    ? l10n.statusReceived
                     : _currentStep == 1
-                        ? 'Nuestros chefs están preparando tu comida con amor.'
-                        : _currentStep == 2
-                            ? '¡Ya casi llega! Tu comida está en camino.'
-                            : '¡Disfruta tu comida deliciosa!',
+                    ? l10n.statusPreparing
+                    : _currentStep == 2
+                    ? l10n.statusOnWay
+                    : l10n.statusEnjoy,
                 style: theme.textTheme.titleMedium?.copyWith(
-                  color: theme.colorScheme.onSurface.withAlpha((0.7 * 255).round()),
+                  color: theme.colorScheme.onSurface.withAlpha(
+                    (0.7 * 255).round(),
+                  ),
                   height: 1.5,
                 ),
                 textAlign: TextAlign.center,

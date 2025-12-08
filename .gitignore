@@ -43,3 +43,35 @@ app.*.map.json
 /android/app/debug
 /android/app/profile
 /android/app/release
+
+# Node modules
+node_modules/
+
+# Security and Secrets
+.env
+.env.*
+test/.env
+*.pem
+*.key
+*.keystore
+*.jks
+android/local.properties
+
+# OS Metadata
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# Build Artifacts & Archives
+*.apk
+*.aab
+*.ipa
+*.zip
+*.tar.gz
+*.rar
+
+# flutter ephemeral
+.flutter-plugins
+linux/flutter/ephemeral
+windows/flutter/ephemeral
+macos/Flutter/ephemeral

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'dart:math';
 import 'theme_toggle.dart';
 import 'scratch_card.dart';
-import 'confetti_widget.dart';
+
 import '../../services/coupon_history.service.dart';
 import '../../../features/coupons/presentation/screens/coupon_history_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -56,8 +56,14 @@ class AppHeader extends StatelessWidget {
         ),
         PopupMenuItem(
           child: ListTile(
-            leading: Icon(Icons.logout, color: Theme.of(context).colorScheme.error),
-            title: Text('Cerrar Sesión', style: TextStyle(color: Theme.of(context).colorScheme.error)),
+            leading: Icon(
+              Icons.logout,
+              color: Theme.of(context).colorScheme.error,
+            ),
+            title: Text(
+              'Cerrar Sesión',
+              style: TextStyle(color: Theme.of(context).colorScheme.error),
+            ),
             onTap: () {
               Navigator.pop(context);
               _showLogoutDialog(context);
@@ -74,51 +80,59 @@ class AppHeader extends StatelessWidget {
     final wonCoupon = coupons[random.nextInt(coupons.length)];
     final historyService = CouponHistoryService();
     bool revealed = false;
-    
+
     showDialog(
       context: context,
       builder: (context) => StatefulBuilder(
-        builder: (context, setState) => CelebrationConfetti(
-          shouldPlay: revealed,
-          child: AlertDialog(
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-            title: const Text('🎉 Rasca y Gana', textAlign: TextAlign.center),
-            content: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                const Text(
-                  'Rasca la tarjeta para revelar tu cupón:',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(fontSize: 14),
-                ),
-                const SizedBox(height: 20),
-                ScratchCard(
-                  hiddenText: wonCoupon,
-                  onRevealed: () async {
-                    setState(() => revealed = true);
-                    // Guardar cupón en historial
-                    await historyService.saveCoupon(wonCoupon);
-                  },
-                ),
-                if (revealed) ...[
-                  const SizedBox(height: 16),
-                  Icon(Icons.celebration, color: Theme.of(context).colorScheme.secondary, size: 40),
-                  const SizedBox(height: 8),
-                  Text(
-                    '¡Felicidades! Úsalo en tu carrito',
-                    style: TextStyle(fontSize: 12, color: Theme.of(context).colorScheme.onSurface.withAlpha((0.75 * 255).round())),
-                    textAlign: TextAlign.center,
-                  ),
-                ],
-              ],
-            ),
-            actions: [
-              TextButton(
-                onPressed: () => Navigator.pop(context),
-                child: const Text('Cerrar'),
+        builder: (context, setState) => AlertDialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20),
+          ),
+          title: const Text('🎉 Rasca y Gana', textAlign: TextAlign.center),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const Text(
+                'Rasca la tarjeta para revelar tu cupón:',
+                textAlign: TextAlign.center,
+                style: TextStyle(fontSize: 14),
               ),
+              const SizedBox(height: 20),
+              ScratchCard(
+                hiddenText: wonCoupon,
+                onRevealed: () async {
+                  setState(() => revealed = true);
+                  // Guardar cupón en historial
+                  await historyService.saveCoupon(wonCoupon);
+                },
+              ),
+              if (revealed) ...[
+                const SizedBox(height: 16),
+                Icon(
+                  Icons.celebration,
+                  color: Theme.of(context).colorScheme.secondary,
+                  size: 40,
+                ),
+                const SizedBox(height: 8),
+                Text(
+                  '¡Felicidades! Úsalo en tu carrito',
+                  style: TextStyle(
+                    fontSize: 12,
+                    color: Theme.of(
+                      context,
+                    ).colorScheme.onSurface.withAlpha((0.75 * 255).round()),
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+              ],
             ],
           ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: const Text('Cerrar'),
+            ),
+          ],
         ),
       ),
     );
@@ -225,20 +239,22 @@ class AppHeader extends StatelessWidget {
               const SizedBox(width: 8),
               SizedBox(
                 width: 200,
-                child: Text(
-                  address,
-                  overflow: TextOverflow.ellipsis,
-                ),
+                child: Text(address, overflow: TextOverflow.ellipsis),
               ),
             ],
           ),
           Row(
             children: [
-              const ThemeToggle(),
               IconButton(
                 onPressed: () => _showMenu(context),
-                icon: const Icon(Icons.more_vert),
+                icon: Image.asset(
+                  'assets/icons/etiqueta.png',
+                  width: 24,
+                  height: 24,
+                  color: Theme.of(context).colorScheme.onSurface,
+                ),
               ),
+              const ThemeToggle(),
             ],
           ),
         ],

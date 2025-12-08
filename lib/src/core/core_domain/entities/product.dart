@@ -7,7 +7,7 @@ class Product {
   final String description;
   final List<ProductExtra> availableExtras;
 
-  Product({
+  const Product({
     required this.id,
     required this.name,
     required this.category,
@@ -23,7 +23,7 @@ class ProductExtra {
   final String name;
   final int price;
 
-  ProductExtra({
+  const ProductExtra({
     required this.id,
     required this.name,
     required this.price,

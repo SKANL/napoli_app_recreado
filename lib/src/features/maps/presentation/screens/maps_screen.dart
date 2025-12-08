@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:napoli_app_v1/l10n/arb/app_localizations.dart';
 
 /// Pantalla de Maps UI-only (sin integración real de Google Maps)
 class MapsScreen extends StatelessWidget {
@@ -17,22 +18,32 @@ class MapsScreen extends StatelessWidget {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Icon(Icons.map, size: 100, color: Theme.of(context).colorScheme.onSurface.withAlpha((0.7 * 255).round())),
+                    Icon(
+                      Icons.map,
+                      size: 100,
+                      color: Theme.of(
+                        context,
+                      ).colorScheme.onSurface.withAlpha((0.7 * 255).round()),
+                    ),
                     const SizedBox(height: 16),
                     Text(
-                      'Map View',
+                      AppLocalizations.of(context)!.mapViewTitle,
                       style: TextStyle(
                         fontSize: 24,
                         fontWeight: FontWeight.bold,
-                        color: Theme.of(context).colorScheme.onSurface.withAlpha((0.85 * 255).round()),
+                        color: Theme.of(
+                          context,
+                        ).colorScheme.onSurface.withAlpha((0.85 * 255).round()),
                       ),
                     ),
                     const SizedBox(height: 8),
                     Text(
-                      '(Google Maps integration disabled)',
+                      AppLocalizations.of(context)!.mapsDisabled,
                       style: TextStyle(
                         fontSize: 14,
-                        color: Theme.of(context).colorScheme.onSurface.withAlpha((0.7 * 255).round()),
+                        color: Theme.of(
+                          context,
+                        ).colorScheme.onSurface.withAlpha((0.7 * 255).round()),
                       ),
                     ),
                   ],
@@ -44,7 +55,7 @@ class MapsScreen extends StatelessWidget {
               bottom: 100,
               left: 30,
               right: 30,
-                child: Container(
+              child: Container(
                 padding: const EdgeInsets.all(16),
                 decoration: BoxDecoration(
                   // Use the shared ColorScheme surface defined in theme.dart
@@ -52,14 +63,16 @@ class MapsScreen extends StatelessWidget {
                   borderRadius: BorderRadius.circular(12),
                   boxShadow: [
                     BoxShadow(
-                      color: Theme.of(context).shadowColor.withAlpha((0.2 * 255).round()),
+                      color: Theme.of(
+                        context,
+                      ).shadowColor.withAlpha((0.2 * 255).round()),
                       blurRadius: 8,
                       offset: const Offset(0, 4),
                     ),
                   ],
                 ),
                 child: Text(
-                  'Current Location, 12345\nStreet Name, City',
+                  AppLocalizations.of(context)!.mockAddress,
                   style: TextStyle(
                     color: Theme.of(context).textTheme.bodyLarge?.color,
                     fontSize: 16,
@@ -73,7 +86,7 @@ class MapsScreen extends StatelessWidget {
             Positioned(
               top: 16,
               left: 16,
-                child: IconButton(
+              child: IconButton(
                 onPressed: () => Navigator.of(context).pop(),
                 icon: Icon(
                   Icons.arrow_back_ios_new_outlined,

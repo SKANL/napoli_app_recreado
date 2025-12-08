@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import '../theme.dart';
 import 'dart:ui' as ui;
 import 'dart:math' as math;
-import 'package:audioplayers/audioplayers.dart';
 import 'package:lottie/lottie.dart';
 
 /// Widget de scratch card mejorado con sonidos y efectos visuales
@@ -10,25 +9,22 @@ class ScratchCard extends StatefulWidget {
   final String hiddenText;
   final VoidCallback? onRevealed;
 
-  const ScratchCard({
-    super.key,
-    required this.hiddenText,
-    this.onRevealed,
-  });
+  const ScratchCard({super.key, required this.hiddenText, this.onRevealed});
 
   @override
   State<ScratchCard> createState() => _ScratchCardState();
 }
 
-class _ScratchCardState extends State<ScratchCard> with SingleTickerProviderStateMixin {
+class _ScratchCardState extends State<ScratchCard>
+    with SingleTickerProviderStateMixin {
   final List<Offset> _scratchedPoints = [];
-  final AudioPlayer _audioPlayer = AudioPlayer();
+  // final AudioPlayer _audioPlayer = AudioPlayer();
   bool _isRevealed = false;
   bool _isScratching = false;
   double _scratchProgress = 0.0;
   late AnimationController _shakeController;
   late Animation<double> _shakeAnimation;
-  
+
   static const _revealThreshold = 60;
 
   @override
@@ -45,7 +41,7 @@ class _ScratchCardState extends State<ScratchCard> with SingleTickerProviderStat
 
   @override
   void dispose() {
-    _audioPlayer.dispose();
+    // _audioPlayer.dispose();
     _shakeController.dispose();
     super.dispose();
   }
@@ -67,8 +63,11 @@ class _ScratchCardState extends State<ScratchCard> with SingleTickerProviderStat
 
     setState(() {
       _scratchedPoints.add(details.localPosition);
-      _scratchProgress = math.min(_scratchedPoints.length / _revealThreshold, 1.0);
-      
+      _scratchProgress = math.min(
+        _scratchedPoints.length / _revealThreshold,
+        1.0,
+      );
+
       if (_scratchedPoints.length > _revealThreshold && !_isRevealed) {
         _isRevealed = true;
         _isScratching = false;
@@ -105,20 +104,24 @@ class _ScratchCardState extends State<ScratchCard> with SingleTickerProviderStat
         onPanUpdate: _onPanUpdate,
         onPanEnd: _onPanEnd,
         child: Builder(
-            builder: (context) {
+          builder: (context) {
             // Usar MediaQuery en lugar de LayoutBuilder para evitar consultas intrínsecas
             final screenW = MediaQuery.of(context).size.width;
             final cardWidth = math.min(screenW * 0.9, 320.0);
             final maxCardHeight = MediaQuery.of(context).size.height * 0.45;
-            final cardHeight = math.min(cardWidth * 0.64, maxCardHeight); // limitar altura para diálogos
-            final scale = cardWidth / 280.0; // factor para escalar iconos y textos
-              final theme = Theme.of(context);
-              final onPrimary = theme.colorScheme.onPrimary;
+            final cardHeight = math.min(
+              cardWidth * 0.64,
+              maxCardHeight,
+            ); // limitar altura para diálogos
+            final scale =
+                cardWidth / 280.0; // factor para escalar iconos y textos
+            final theme = Theme.of(context);
+            final onPrimary = theme.colorScheme.onPrimary;
 
             return Container(
               width: cardWidth,
               height: cardHeight,
-                decoration: BoxDecoration(
+              decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(20 * scale),
                 boxShadow: [
                   BoxShadow(
@@ -139,7 +142,11 @@ class _ScratchCardState extends State<ScratchCard> with SingleTickerProviderStat
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Icon(Icons.card_giftcard, size: 48 * scale, color: theme.colorScheme.primary),
+                            Icon(
+                              Icons.card_giftcard,
+                              size: 48 * scale,
+                              color: theme.colorScheme.primary,
+                            ),
                             SizedBox(height: 12 * scale),
                             Text(
                               widget.hiddenText,
@@ -151,7 +158,9 @@ class _ScratchCardState extends State<ScratchCard> with SingleTickerProviderStat
                                 letterSpacing: 3 * scale,
                                 shadows: [
                                   Shadow(
-                                    color: theme.shadowColor.withAlpha((0.08 * 255).round()),
+                                    color: theme.shadowColor.withAlpha(
+                                      (0.08 * 255).round(),
+                                    ),
                                     offset: Offset(2 * scale, 2 * scale),
                                     blurRadius: 4 * scale,
                                   ),
@@ -160,9 +169,14 @@ class _ScratchCardState extends State<ScratchCard> with SingleTickerProviderStat
                             ),
                             SizedBox(height: 8 * scale),
                             Container(
-                              padding: EdgeInsets.symmetric(horizontal: 16 * scale, vertical: 6 * scale),
+                              padding: EdgeInsets.symmetric(
+                                horizontal: 16 * scale,
+                                vertical: 6 * scale,
+                              ),
                               decoration: BoxDecoration(
-                                color: theme.colorScheme.primary.withAlpha((0.12 * 255).round()),
+                                color: theme.colorScheme.primary.withAlpha(
+                                  (0.12 * 255).round(),
+                                ),
                                 borderRadius: BorderRadius.circular(20 * scale),
                               ),
                               child: Text(
@@ -187,7 +201,7 @@ class _ScratchCardState extends State<ScratchCard> with SingleTickerProviderStat
                           strokeWidth: 45 * scale,
                           circleRadius: 22.5 * scale,
                         ),
-                          child: Container(
+                        child: Container(
                           decoration: BoxDecoration(
                             // Usar un degradado verde -> rojo para la capa superior del rasca
                             gradient: LinearGradient(
@@ -204,7 +218,12 @@ class _ScratchCardState extends State<ScratchCard> with SingleTickerProviderStat
                               // Textura de puntos plateados
                               Positioned.fill(
                                 child: CustomPaint(
-                                      painter: _TexturePainter(scale, theme.colorScheme.onSurface.withAlpha((0.08 * 255).round())),
+                                  painter: _TexturePainter(
+                                    scale,
+                                    theme.colorScheme.onSurface.withAlpha(
+                                      (0.08 * 255).round(),
+                                    ),
+                                  ),
                                 ),
                               ),
                               // Instrucciones
@@ -214,24 +233,35 @@ class _ScratchCardState extends State<ScratchCard> with SingleTickerProviderStat
                                   child: Column(
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
-                                    TweenAnimationBuilder<double>(
-                                      tween: Tween(begin: 0.8, end: _isScratching ? 1.2 : 1.0),
-                                      duration: const Duration(milliseconds: 200),
-                                      builder: (context, animScale, child) {
-                                        return Transform.scale(
-                                          scale: animScale,
-                                          child: child,
-                                        );
-                                      },
+                                      TweenAnimationBuilder<double>(
+                                        tween: Tween(
+                                          begin: 0.8,
+                                          end: _isScratching ? 1.2 : 1.0,
+                                        ),
+                                        duration: const Duration(
+                                          milliseconds: 200,
+                                        ),
+                                        builder: (context, animScale, child) {
+                                          return Transform.scale(
+                                            scale: animScale,
+                                            child: child,
+                                          );
+                                        },
                                         child: Container(
                                           width: 96 * scale,
                                           height: 96 * scale,
                                           decoration: BoxDecoration(
-                                            color: theme.colorScheme.onPrimary.withAlpha((0.06 * 255).round()),
+                                            color: theme.colorScheme.onPrimary
+                                                .withAlpha(
+                                                  (0.06 * 255).round(),
+                                                ),
                                             shape: BoxShape.circle,
                                             boxShadow: [
                                               BoxShadow(
-                                                color: theme.shadowColor.withAlpha((0.12 * 255).round()),
+                                                color: theme.shadowColor
+                                                    .withAlpha(
+                                                      (0.12 * 255).round(),
+                                                    ),
                                                 blurRadius: 8 * scale,
                                                 offset: Offset(0, 4 * scale),
                                               ),
@@ -248,67 +278,90 @@ class _ScratchCardState extends State<ScratchCard> with SingleTickerProviderStat
                                             ),
                                           ),
                                         ),
-                                    ),
-                                    SizedBox(height: 16 * scale),
-                                    Text(
-                                      '¡Rasca aquí!',
-                                      style: TextStyle(
-                                        fontSize: 22 * scale,
-                                        fontWeight: FontWeight.bold,
-                                        color: onPrimary.withAlpha((0.95 * 255).round()),
-                                        letterSpacing: 1.5 * scale,
-                                        shadows: [
-                                          Shadow(
-                                            color: theme.shadowColor.withAlpha((0.5 * 255).round()),
-                                            offset: Offset(2 * scale, 2 * scale),
-                                            blurRadius: 4 * scale,
+                                      ),
+                                      SizedBox(height: 16 * scale),
+                                      Text(
+                                        '¡Rasca aquí!',
+                                        style: TextStyle(
+                                          fontSize: 22 * scale,
+                                          fontWeight: FontWeight.bold,
+                                          color: onPrimary.withAlpha(
+                                            (0.95 * 255).round(),
                                           ),
-                                        ],
-                                      ),
-                                    ),
-                                    SizedBox(height: 8 * scale),
-                                    Text(
-                                      'Descubre tu premio',
-                                      style: TextStyle(
-                                        fontSize: 15 * scale,
-                                        color: onPrimary.withAlpha((0.8 * 255).round()),
-                                        letterSpacing: 0.8 * scale,
-                                      ),
-                                    ),
-                                    SizedBox(height: 24 * scale),
-                                    // Barra de progreso
-                                    Container(
-                                      width: cardWidth * 0.72,
-                                      height: 10 * scale,
-                                      decoration: BoxDecoration(
-                                        color: onPrimary.withAlpha((0.3 * 255).round()),
-                                        borderRadius: BorderRadius.circular(5 * scale),
-                                        border: Border.all(
-                                          color: onPrimary.withAlpha((0.5 * 255).round()),
-                                          width: 1 * scale,
+                                          letterSpacing: 1.5 * scale,
+                                          shadows: [
+                                            Shadow(
+                                              color: theme.shadowColor
+                                                  .withAlpha(
+                                                    (0.5 * 255).round(),
+                                                  ),
+                                              offset: Offset(
+                                                2 * scale,
+                                                2 * scale,
+                                              ),
+                                              blurRadius: 4 * scale,
+                                            ),
+                                          ],
                                         ),
                                       ),
-                                      child: ClipRRect(
-                                        borderRadius: BorderRadius.circular(5 * scale),
-                                        child: LinearProgressIndicator(
-                                          value: _scratchProgress,
+                                      SizedBox(height: 8 * scale),
+                                      Text(
+                                        'Descubre tu premio',
+                                        style: TextStyle(
+                                          fontSize: 15 * scale,
+                                          color: onPrimary.withAlpha(
+                                            (0.8 * 255).round(),
+                                          ),
+                                          letterSpacing: 0.8 * scale,
+                                        ),
+                                      ),
+                                      SizedBox(height: 24 * scale),
+                                      // Barra de progreso
+                                      Container(
+                                        width: cardWidth * 0.72,
+                                        height: 10 * scale,
+                                        decoration: BoxDecoration(
+                                          color: onPrimary.withAlpha(
+                                            (0.3 * 255).round(),
+                                          ),
+                                          borderRadius: BorderRadius.circular(
+                                            5 * scale,
+                                          ),
+                                          border: Border.all(
+                                            color: onPrimary.withAlpha(
+                                              (0.5 * 255).round(),
+                                            ),
+                                            width: 1 * scale,
+                                          ),
+                                        ),
+                                        child: ClipRRect(
+                                          borderRadius: BorderRadius.circular(
+                                            5 * scale,
+                                          ),
+                                          child: LinearProgressIndicator(
+                                            value: _scratchProgress,
                                             backgroundColor: Colors.transparent,
-                                          valueColor: AlwaysStoppedAnimation<Color>(
-                                            onPrimary.withAlpha((0.9 * 255).round()),
+                                            valueColor:
+                                                AlwaysStoppedAnimation<Color>(
+                                                  onPrimary.withAlpha(
+                                                    (0.9 * 255).round(),
+                                                  ),
+                                                ),
                                           ),
                                         ),
                                       ),
-                                    ),
-                                    SizedBox(height: 8 * scale),
-                                    Text(
-                                      '${(_scratchProgress * 100).toInt()}%',
-                                      style: TextStyle(
-                                        fontSize: 14 * scale,
-                                        fontWeight: FontWeight.bold,
-                                        color: onPrimary.withAlpha((0.8 * 255).round()),
+                                      SizedBox(height: 8 * scale),
+                                      Text(
+                                        '${(_scratchProgress * 100).toInt()}%',
+                                        style: TextStyle(
+                                          fontSize: 14 * scale,
+                                          fontWeight: FontWeight.bold,
+                                          color: onPrimary.withAlpha(
+                                            (0.8 * 255).round(),
+                                          ),
+                                        ),
                                       ),
-                                    ),
-                                  ],
+                                    ],
                                   ),
                                 ),
                               ),
@@ -332,12 +385,16 @@ class _ScratchPainter extends CustomPainter {
   final double strokeWidth;
   final double circleRadius;
 
-  _ScratchPainter(this.scratchedPoints, {this.strokeWidth = 45.0, this.circleRadius = 22.5});
+  _ScratchPainter(
+    this.scratchedPoints, {
+    this.strokeWidth = 45.0,
+    this.circleRadius = 22.5,
+  });
 
   @override
   void paint(Canvas canvas, Size size) {
     final paint = Paint()
-  ..color = AppColors.transparent
+      ..color = AppColors.transparent
       ..blendMode = ui.BlendMode.clear
       ..strokeCap = StrokeCap.round
       ..strokeJoin = StrokeJoin.round
@@ -346,7 +403,7 @@ class _ScratchPainter extends CustomPainter {
     for (int i = 0; i < scratchedPoints.length - 1; i++) {
       final current = scratchedPoints[i];
       final next = scratchedPoints[i + 1];
-      
+
       if (!current.isInfinite && !next.isInfinite) {
         // Dibujar línea
         canvas.drawLine(current, next, paint);
