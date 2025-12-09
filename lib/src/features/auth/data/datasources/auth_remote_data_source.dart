@@ -9,8 +9,8 @@ abstract class AuthRemoteDataSource {
   Future<UserModel> updateProfile(UserModel user);
 }
 
-@LazySingleton(as: AuthRemoteDataSource)
-class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
+@LazySingleton(as: AuthRemoteDataSource, env: ['dev'])
+class MockAuthDataSource implements AuthRemoteDataSource {
   @override
   Future<UserModel> login(String email, String password) async {
     // Simulate network delay
@@ -82,5 +82,26 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
   Future<UserModel> updateProfile(UserModel user) async {
     await Future.delayed(const Duration(milliseconds: 500));
     return user;
+  }
+}
+
+@LazySingleton(as: AuthRemoteDataSource, env: ['prod'])
+class RealAuthDataSource implements AuthRemoteDataSource {
+  @override
+  Future<UserModel> login(String email, String password) {
+    // TODO: implement login with real API
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<UserModel> register(String name, String email, String password) {
+    // TODO: implement register with real API
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<UserModel> updateProfile(UserModel user) {
+    // TODO: implement updateProfile with real API
+    throw UnimplementedError();
   }
 }

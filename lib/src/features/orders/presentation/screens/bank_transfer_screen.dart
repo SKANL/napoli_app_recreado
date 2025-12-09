@@ -3,6 +3,9 @@ import 'package:napoli_app_v1/src/core/services/business_hours.service.dart';
 import 'package:napoli_app_v1/src/di.dart';
 import '../widgets/bank_instructions.dart';
 import '../widgets/payment_proof_upload.dart';
+import '../widgets/bank_transfer_closed_view.dart';
+import '../widgets/bank_transfer_amount_display.dart';
+import '../widgets/bank_transfer_instructions_info.dart';
 
 class BankTransferScreen extends StatefulWidget {
   final double totalAmount;
@@ -70,105 +73,19 @@ class _BankTransferScreenState extends State<BankTransferScreen> {
         ),
       ),
       body: !isOpen
-          ? _buildClosedMessage(theme)
+          ? const BankTransferClosedView()
           : SingleChildScrollView(
               padding: const EdgeInsets.all(16),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   // Alerta informativa
-                  Container(
-                    padding: const EdgeInsets.all(16),
-                    decoration: BoxDecoration(
-                      color: theme.colorScheme.primaryContainer,
-                      borderRadius: BorderRadius.circular(12),
-                      border: Border.all(
-                        color: theme.colorScheme.primary.withValues(alpha: 0.3),
-                      ),
-                    ),
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Icon(
-                          Icons.info_outline,
-                          color: theme.colorScheme.primary,
-                          size: 24,
-                        ),
-                        const SizedBox(width: 12),
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                'Instrucciones',
-                                style: theme.textTheme.titleSmall?.copyWith(
-                                  fontWeight: FontWeight.bold,
-                                  color: theme.colorScheme.primary,
-                                ),
-                              ),
-                              const SizedBox(height: 4),
-                              Text(
-                                'Realiza la transferencia con los datos bancarios proporcionados y adjunta el comprobante para confirmar tu pedido.',
-                                style: theme.textTheme.bodySmall?.copyWith(
-                                  color: theme.colorScheme.onSurface.withValues(
-                                    alpha: 0.8,
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
+                  const BankTransferInstructionsInfo(),
 
                   const SizedBox(height: 24),
 
                   // Monto a transferir
-                  Container(
-                    width: double.infinity,
-                    padding: const EdgeInsets.all(20),
-                    decoration: BoxDecoration(
-                      gradient: LinearGradient(
-                        colors: [
-                          theme.colorScheme.secondary,
-                          theme.colorScheme.secondary.withValues(alpha: 0.8),
-                        ],
-                        begin: Alignment.topLeft,
-                        end: Alignment.bottomRight,
-                      ),
-                      borderRadius: BorderRadius.circular(16),
-                      boxShadow: [
-                        BoxShadow(
-                          color: theme.colorScheme.secondary.withValues(
-                            alpha: 0.3,
-                          ),
-                          blurRadius: 12,
-                          offset: const Offset(0, 4),
-                        ),
-                      ],
-                    ),
-                    child: Column(
-                      children: [
-                        Text(
-                          'Monto a Transferir',
-                          style: theme.textTheme.titleMedium?.copyWith(
-                            color: theme.colorScheme.onSecondary,
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
-                        const SizedBox(height: 8),
-                        Text(
-                          '\$${widget.totalAmount.toStringAsFixed(2)} MXN',
-                          style: theme.textTheme.headlineMedium?.copyWith(
-                            color: theme.colorScheme.onSecondary,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 36,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
+                  BankTransferAmountDisplay(totalAmount: widget.totalAmount),
 
                   const SizedBox(height: 24),
 
@@ -242,83 +159,6 @@ class _BankTransferScreenState extends State<BankTransferScreen> {
                 ],
               ),
             ),
-    );
-  }
-
-  Widget _buildClosedMessage(ThemeData theme) {
-    final nextOpening = getIt<BusinessHoursService>().getNextOpeningTime();
-
-    return Center(
-      child: Padding(
-        padding: const EdgeInsets.all(24),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(
-              Icons.access_time_outlined,
-              size: 80,
-              color: theme.colorScheme.primary.withValues(alpha: 0.5),
-            ),
-            const SizedBox(height: 24),
-            Text(
-              'Fuera de Horario',
-              style: theme.textTheme.headlineSmall?.copyWith(
-                fontWeight: FontWeight.bold,
-                color: theme.colorScheme.onSurface,
-              ),
-            ),
-            const SizedBox(height: 12),
-            Text(
-              'Los datos bancarios solo están disponibles durante nuestro horario de atención.',
-              textAlign: TextAlign.center,
-              style: theme.textTheme.bodyMedium?.copyWith(
-                color: theme.colorScheme.onSurface.withValues(alpha: 0.7),
-              ),
-            ),
-            const SizedBox(height: 24),
-            Container(
-              padding: const EdgeInsets.all(16),
-              decoration: BoxDecoration(
-                color: theme.colorScheme.primaryContainer,
-                borderRadius: BorderRadius.circular(12),
-              ),
-              child: Column(
-                children: [
-                  Text(
-                    'Próxima apertura:',
-                    style: theme.textTheme.bodySmall?.copyWith(
-                      color: theme.colorScheme.onSurface.withValues(alpha: 0.7),
-                    ),
-                  ),
-                  const SizedBox(height: 4),
-                  Text(
-                    nextOpening,
-                    textAlign: TextAlign.center,
-                    style: theme.textTheme.titleMedium?.copyWith(
-                      fontWeight: FontWeight.bold,
-                      color: theme.colorScheme.primary,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            const SizedBox(height: 32),
-            ElevatedButton.icon(
-              onPressed: () => Navigator.pop(context),
-              icon: const Icon(Icons.arrow_back),
-              label: const Text('Volver'),
-              style: ElevatedButton.styleFrom(
-                backgroundColor: theme.colorScheme.primary,
-                foregroundColor: theme.colorScheme.onPrimary,
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 32,
-                  vertical: 16,
-                ),
-              ),
-            ),
-          ],
-        ),
-      ),
     );
   }
 }

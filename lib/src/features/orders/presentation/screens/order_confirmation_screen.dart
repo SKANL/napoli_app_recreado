@@ -1,7 +1,6 @@
 // ignore_for_file: deprecated_member_use
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:napoli_app_v1/src/core/core_ui/theme.dart';
 import 'package:napoli_app_v1/src/di.dart';
 import 'package:napoli_app_v1/src/features/cart/presentation/cubit/cart_cubit.dart';
 
@@ -22,6 +21,8 @@ import '../widgets/payment_method_selector.dart';
 import '../widgets/order_summary.dart';
 import '../widgets/estimated_time_widget.dart';
 import '../widgets/address_selection_dialog.dart';
+import '../widgets/payment_action_button.dart';
+import '../widgets/security_note.dart';
 
 class OrderConfirmationScreen extends StatelessWidget {
   const OrderConfirmationScreen({super.key});
@@ -318,70 +319,15 @@ class _OrderConfirmationScreenState extends State<_OrderConfirmationContent> {
               const SizedBox(height: 20),
 
               // Botón de pago
-              SizedBox(
-                width: double.infinity,
-                height: 56,
-                child: ElevatedButton(
-                  onPressed: _isProcessingPayment ? null : _processPayment,
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: theme.colorScheme.secondary,
-                    disabledBackgroundColor: theme.disabledColor,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    elevation: 2,
-                  ),
-                  child: _isProcessingPayment
-                      ? SizedBox(
-                          height: 24,
-                          width: 24,
-                          child: CircularProgressIndicator(
-                            valueColor: AlwaysStoppedAnimation<Color>(
-                              theme.colorScheme.onSecondary,
-                            ),
-                            strokeWidth: 2,
-                          ),
-                        )
-                      : Text(
-                          _getPaymentButtonText(),
-                          style: theme.textTheme.titleMedium?.copyWith(
-                            fontWeight: FontWeight.bold,
-                            color: theme.colorScheme.onSecondary,
-                          ),
-                        ),
-                ),
+              PaymentActionButton(
+                isProcessing: _isProcessingPayment,
+                paymentMethod: _selectedPaymentMethod,
+                onPressed: _isProcessingPayment ? null : _processPayment,
               ),
               const SizedBox(height: 16),
 
               // Información de seguridad
-              Container(
-                padding: const EdgeInsets.all(12),
-                decoration: BoxDecoration(
-                  color: theme.colorScheme.tertiary,
-                  borderRadius: BorderRadius.circular(AppTheme.radiusSmall),
-                ),
-                child: Row(
-                  children: [
-                    Icon(
-                      Icons.lock,
-                      color: theme.colorScheme.primary,
-                      size: 16,
-                    ),
-                    const SizedBox(width: 8),
-                    Expanded(
-                      child: Text(
-                        l10n.simulationMessage,
-                        style: theme.textTheme.bodySmall?.copyWith(
-                          color: theme.colorScheme.onSurface.withAlpha(
-                            (0.7 * 255).round(),
-                          ),
-                          fontStyle: FontStyle.italic,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
+              const SecurityNote(),
               const SizedBox(height: 20),
             ],
           ),
@@ -407,17 +353,5 @@ class _OrderConfirmationScreenState extends State<_OrderConfirmationContent> {
         },
       ),
     );
-  }
-
-  String _getPaymentButtonText() {
-    if (_isProcessingPayment) return '';
-    final l10n = AppLocalizations.of(context)!;
-
-    if (_selectedPaymentMethod == 'transferencia') {
-      return 'Confirmar Transferencia';
-    } else if (_selectedPaymentMethod == 'card') {
-      return 'Pagar con Tarjeta';
-    }
-    return l10n.confirmOrder;
   }
 }

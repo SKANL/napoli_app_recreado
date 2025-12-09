@@ -5,7 +5,9 @@ import 'package:napoli_app_v1/src/features/settings/domain/entities/order_histor
 import 'package:napoli_app_v1/src/features/settings/domain/repositories/order_history_repository.dart';
 import 'package:napoli_app_v1/src/features/settings/presentation/widgets/favorite_products_list.dart';
 import 'package:napoli_app_v1/src/features/settings/presentation/widgets/order_details_sheet.dart';
-import 'package:napoli_app_v1/src/features/settings/presentation/widgets/order_history_card.dart';
+import 'package:napoli_app_v1/src/features/settings/presentation/widgets/purchase_history_filters.dart';
+import 'package:napoli_app_v1/src/features/settings/presentation/widgets/recent_orders_list.dart';
+import 'package:napoli_app_v1/src/features/settings/presentation/widgets/empty_orders_state.dart';
 
 class PurchaseHistoryScreen extends StatefulWidget {
   const PurchaseHistoryScreen({super.key});
@@ -106,148 +108,25 @@ class _PurchaseHistoryScreenState extends State<PurchaseHistoryScreen>
     return Column(
       children: [
         // Filtros
-        _buildFilters(theme),
+        PurchaseHistoryFilters(
+          selectedFilter: selectedFilter,
+          filters: filters,
+          onFilterSelected: (filter) => setState(() => selectedFilter = filter),
+        ),
 
         // Lista de órdenes
         Expanded(
           child: filteredOrders.isEmpty
-              ? _buildEmptyState(theme)
-              : ListView.builder(
-                  padding: const EdgeInsets.all(16),
-                  itemCount: filteredOrders.length,
-                  itemBuilder: (context, index) {
-                    final order = filteredOrders[index];
-                    return OrderHistoryCard(
-                      order: order,
-                      onTap: () => _showOrderDetails(context, order),
-                      onReorder: () => _reorderItems(context, order),
-                      onTrack: () => _trackOrder(context, order),
-                      onRate: (rating) => _handleRateOrder(order, rating),
-                    );
-                  },
+              ? EmptyOrdersState(selectedFilter: selectedFilter)
+              : RecentOrdersList(
+                  orders: filteredOrders,
+                  onTap: (order) => _showOrderDetails(context, order),
+                  onReorder: (order) => _reorderItems(context, order),
+                  onTrack: (order) => _trackOrder(context, order),
+                  onRate: (order, rating) => _handleRateOrder(order, rating),
                 ),
         ),
       ],
-    );
-  }
-
-  Widget _buildFilters(ThemeData theme) {
-    return Container(
-      height: 60,
-      padding: const EdgeInsets.symmetric(vertical: 8),
-      child: ListView.builder(
-        scrollDirection: Axis.horizontal,
-        padding: const EdgeInsets.symmetric(horizontal: 16),
-        itemCount: filters.length,
-        itemBuilder: (context, index) {
-          final filter = filters[index];
-          final isSelected = filter == selectedFilter;
-
-          return Container(
-            margin: const EdgeInsets.only(right: 8),
-            child: FilterChip(
-              label: Text(_getFilterName(context, filter)),
-              selected: isSelected,
-              onSelected: (selected) {
-                setState(() {
-                  selectedFilter = filter;
-                });
-              },
-              backgroundColor: theme.colorScheme.surface,
-              selectedColor: theme.colorScheme.primary.withValues(alpha: 0.2),
-              checkmarkColor: theme.colorScheme.primary,
-              labelStyle: TextStyle(
-                color: isSelected
-                    ? theme.colorScheme.primary
-                    : theme.colorScheme.onSurface,
-                fontWeight: isSelected ? FontWeight.w600 : FontWeight.normal,
-              ),
-              side: BorderSide(
-                color: isSelected
-                    ? theme.colorScheme.primary
-                    : theme.dividerColor.withValues(alpha: 0.3),
-              ),
-            ),
-          );
-        },
-      ),
-    );
-  }
-
-  String _getFilterName(BuildContext context, String filter) {
-    final l10n = AppLocalizations.of(context)!;
-    switch (filter) {
-      case 'all':
-        return l10n.filterAll;
-      case 'delivered':
-        return l10n.filterDelivered;
-      case 'in_progress':
-        return l10n.filterInProgress;
-      case 'cancelled':
-        return l10n.filterCancelled;
-      default:
-        return filter;
-    }
-  }
-
-  Widget _buildEmptyState(ThemeData theme) {
-    final l10n = AppLocalizations.of(context)!;
-    String message;
-    IconData icon;
-
-    switch (selectedFilter) {
-      case 'in_progress':
-        message = l10n.noOrdersInProgress;
-        icon = Icons.hourglass_empty;
-        break;
-      case 'cancelled':
-        message = l10n.noOrdersCancelled;
-        icon = Icons.cancel_outlined;
-        break;
-      case 'delivered':
-        message = l10n.noOrdersDelivered;
-        icon = Icons.check_circle_outline;
-        break;
-      default:
-        message = l10n.noOrders;
-        icon = Icons.shopping_bag_outlined;
-    }
-
-    return Center(
-      child: Padding(
-        padding: const EdgeInsets.all(32),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Container(
-              width: 120,
-              height: 120,
-              decoration: BoxDecoration(
-                color: theme.colorScheme.primary.withValues(alpha: 0.1),
-                shape: BoxShape.circle,
-              ),
-              child: Icon(icon, size: 60, color: theme.colorScheme.primary),
-            ),
-            const SizedBox(height: 24),
-            Text(
-              message,
-              style: theme.textTheme.headlineSmall?.copyWith(
-                fontWeight: FontWeight.bold,
-                color: theme.colorScheme.onSurface,
-              ),
-              textAlign: TextAlign.center,
-            ),
-            const SizedBox(height: 8),
-            Text(
-              l10n.ordersEmptyDesc,
-              style: theme.textTheme.bodyMedium?.copyWith(
-                color: theme.colorScheme.onSurface.withValues(alpha: 0.7),
-              ),
-              textAlign: TextAlign.center,
-            ),
-          ],
-        ),
-      ),
     );
   }
 

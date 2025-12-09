@@ -4,5 +4,5 @@ import 'core/di/injection.dart';
 final getIt = GetIt.instance;
 
 Future<void> initDi() async {
-  await configureDependencies();
+  await configureDependencies(environment: 'dev');
 }

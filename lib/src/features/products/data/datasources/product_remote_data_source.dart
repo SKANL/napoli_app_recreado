@@ -6,11 +6,11 @@ abstract class ProductRemoteDataSource {
   Future<List<ProductModel>> getProducts();
 }
 
-@LazySingleton(as: ProductRemoteDataSource)
-class ProductRemoteDataSourceImpl implements ProductRemoteDataSource {
+@LazySingleton(as: ProductRemoteDataSource, env: ['dev'])
+class MockProductDataSource implements ProductRemoteDataSource {
   final DioClient _dioClient;
 
-  ProductRemoteDataSourceImpl(this._dioClient);
+  MockProductDataSource(this._dioClient);
 
   @override
   Future<List<ProductModel>> getProducts() async {
@@ -112,4 +112,18 @@ class ProductRemoteDataSourceImpl implements ProductRemoteDataSource {
       availableExtras: [],
     ),
   ];
+}
+
+@LazySingleton(as: ProductRemoteDataSource, env: ['prod'])
+class RealProductDataSource implements ProductRemoteDataSource {
+  final DioClient _dioClient;
+
+  RealProductDataSource(this._dioClient);
+
+  @override
+  Future<List<ProductModel>> getProducts() {
+    // TODO: implement getProducts with real API
+    // return _dioClient.get('/products')...
+    throw UnimplementedError();
+  }
 }

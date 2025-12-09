@@ -4,6 +4,7 @@ import 'package:napoli_app_v1/src/core/utils/date_formatter.dart';
 import 'package:napoli_app_v1/src/core/utils/payment_icon_resolver.dart';
 import 'package:napoli_app_v1/src/features/orders/presentation/widgets/order_status_chip.dart';
 import 'package:napoli_app_v1/src/features/settings/domain/entities/order_history.dart';
+import 'rating_dialog.dart';
 
 class OrderHistoryCard extends StatelessWidget {
   final OrderHistory order;
@@ -317,58 +318,14 @@ class OrderHistoryCard extends StatelessWidget {
   }
 
   void _showRatingDialog(BuildContext context) {
-    int selectedRating = 5;
-
     showDialog(
       context: context,
-      builder: (context) => StatefulBuilder(
-        builder: (context, setDialogState) => AlertDialog(
-          title: const Text('Calificar Pedido'), // Should be localized
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Text(
-                '¿Cómo fue tu experiencia con este pedido?', // Should be localized
-                style: Theme.of(context).textTheme.bodyMedium,
-                textAlign: TextAlign.center,
-              ),
-              const SizedBox(height: 20),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: List.generate(
-                  5,
-                  (index) => IconButton(
-                    onPressed: () {
-                      setDialogState(() {
-                        selectedRating = index + 1;
-                      });
-                    },
-                    icon: Icon(
-                      index < selectedRating ? Icons.star : Icons.star_border,
-                      color: Colors.amber,
-                      size: 32,
-                    ),
-                  ),
-                ),
-              ),
-            ],
-          ),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.pop(context),
-              child: const Text('Cancelar'), // Should be localized
-            ),
-            ElevatedButton(
-              onPressed: () {
-                Navigator.pop(context);
-                if (onRate != null) {
-                  onRate!(selectedRating);
-                }
-              },
-              child: const Text('Calificar'), // Should be localized
-            ),
-          ],
-        ),
+      builder: (context) => RatingDialog(
+        onRate: (rating) {
+          if (onRate != null) {
+            onRate!(rating);
+          }
+        },
       ),
     );
   }

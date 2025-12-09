@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
-import '../theme.dart';
-import 'dart:ui' as ui;
 import 'dart:math' as math;
-import 'package:lottie/lottie.dart';
+import 'scratch_painters.dart';
+import 'scratch_overlay.dart';
 
 /// Widget de scratch card mejorado con sonidos y efectos visuales
 class ScratchCard extends StatefulWidget {
@@ -116,7 +115,6 @@ class _ScratchCardState extends State<ScratchCard>
             final scale =
                 cardWidth / 280.0; // factor para escalar iconos y textos
             final theme = Theme.of(context);
-            final onPrimary = theme.colorScheme.onPrimary;
 
             return Container(
               width: cardWidth,
@@ -125,7 +123,7 @@ class _ScratchCardState extends State<ScratchCard>
                 borderRadius: BorderRadius.circular(20 * scale),
                 boxShadow: [
                   BoxShadow(
-                    color: theme.shadowColor.withAlpha((0.2 * 255).round()),
+                    color: theme.shadowColor.withValues(alpha: 0.2),
                     blurRadius: 12 * scale,
                     offset: Offset(0, 6 * scale),
                   ),
@@ -158,8 +156,8 @@ class _ScratchCardState extends State<ScratchCard>
                                 letterSpacing: 3 * scale,
                                 shadows: [
                                   Shadow(
-                                    color: theme.shadowColor.withAlpha(
-                                      (0.08 * 255).round(),
+                                    color: theme.shadowColor.withValues(
+                                      alpha: 0.08,
                                     ),
                                     offset: Offset(2 * scale, 2 * scale),
                                     blurRadius: 4 * scale,
@@ -174,8 +172,8 @@ class _ScratchCardState extends State<ScratchCard>
                                 vertical: 6 * scale,
                               ),
                               decoration: BoxDecoration(
-                                color: theme.colorScheme.primary.withAlpha(
-                                  (0.12 * 255).round(),
+                                color: theme.colorScheme.primary.withValues(
+                                  alpha: 0.12,
                                 ),
                                 borderRadius: BorderRadius.circular(20 * scale),
                               ),
@@ -196,7 +194,7 @@ class _ScratchCardState extends State<ScratchCard>
                     // Capa de scratch (se va revelando)
                     if (!_isRevealed)
                       CustomPaint(
-                        painter: _ScratchPainter(
+                        painter: ScratchPainter(
                           _scratchedPoints,
                           strokeWidth: 45 * scale,
                           circleRadius: 22.5 * scale,
@@ -218,152 +216,21 @@ class _ScratchCardState extends State<ScratchCard>
                               // Textura de puntos plateados
                               Positioned.fill(
                                 child: CustomPaint(
-                                  painter: _TexturePainter(
+                                  painter: TexturePainter(
                                     scale,
-                                    theme.colorScheme.onSurface.withAlpha(
-                                      (0.08 * 255).round(),
+                                    theme.colorScheme.onSurface.withValues(
+                                      alpha: 0.08,
                                     ),
                                   ),
                                 ),
                               ),
                               // Instrucciones
-                              Center(
-                                child: SingleChildScrollView(
-                                  physics: const BouncingScrollPhysics(),
-                                  child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      TweenAnimationBuilder<double>(
-                                        tween: Tween(
-                                          begin: 0.8,
-                                          end: _isScratching ? 1.2 : 1.0,
-                                        ),
-                                        duration: const Duration(
-                                          milliseconds: 200,
-                                        ),
-                                        builder: (context, animScale, child) {
-                                          return Transform.scale(
-                                            scale: animScale,
-                                            child: child,
-                                          );
-                                        },
-                                        child: Container(
-                                          width: 96 * scale,
-                                          height: 96 * scale,
-                                          decoration: BoxDecoration(
-                                            color: theme.colorScheme.onPrimary
-                                                .withAlpha(
-                                                  (0.06 * 255).round(),
-                                                ),
-                                            shape: BoxShape.circle,
-                                            boxShadow: [
-                                              BoxShadow(
-                                                color: theme.shadowColor
-                                                    .withAlpha(
-                                                      (0.12 * 255).round(),
-                                                    ),
-                                                blurRadius: 8 * scale,
-                                                offset: Offset(0, 4 * scale),
-                                              ),
-                                            ],
-                                          ),
-                                          child: Center(
-                                            child: Lottie.asset(
-                                              'assets/animation/scratch.json',
-                                              width: 72 * scale,
-                                              height: 72 * scale,
-                                              fit: BoxFit.contain,
-                                              repeat: true,
-                                              animate: !_isRevealed,
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                      SizedBox(height: 16 * scale),
-                                      Text(
-                                        '¡Rasca aquí!',
-                                        style: TextStyle(
-                                          fontSize: 22 * scale,
-                                          fontWeight: FontWeight.bold,
-                                          color: onPrimary.withAlpha(
-                                            (0.95 * 255).round(),
-                                          ),
-                                          letterSpacing: 1.5 * scale,
-                                          shadows: [
-                                            Shadow(
-                                              color: theme.shadowColor
-                                                  .withAlpha(
-                                                    (0.5 * 255).round(),
-                                                  ),
-                                              offset: Offset(
-                                                2 * scale,
-                                                2 * scale,
-                                              ),
-                                              blurRadius: 4 * scale,
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                      SizedBox(height: 8 * scale),
-                                      Text(
-                                        'Descubre tu premio',
-                                        style: TextStyle(
-                                          fontSize: 15 * scale,
-                                          color: onPrimary.withAlpha(
-                                            (0.8 * 255).round(),
-                                          ),
-                                          letterSpacing: 0.8 * scale,
-                                        ),
-                                      ),
-                                      SizedBox(height: 24 * scale),
-                                      // Barra de progreso
-                                      Container(
-                                        width: cardWidth * 0.72,
-                                        height: 10 * scale,
-                                        decoration: BoxDecoration(
-                                          color: onPrimary.withAlpha(
-                                            (0.3 * 255).round(),
-                                          ),
-                                          borderRadius: BorderRadius.circular(
-                                            5 * scale,
-                                          ),
-                                          border: Border.all(
-                                            color: onPrimary.withAlpha(
-                                              (0.5 * 255).round(),
-                                            ),
-                                            width: 1 * scale,
-                                          ),
-                                        ),
-                                        child: ClipRRect(
-                                          borderRadius: BorderRadius.circular(
-                                            5 * scale,
-                                          ),
-                                          child: LinearProgressIndicator(
-                                            value: _scratchProgress,
-                                            backgroundColor: Colors.transparent,
-                                            valueColor:
-                                                AlwaysStoppedAnimation<Color>(
-                                                  onPrimary.withAlpha(
-                                                    (0.9 * 255).round(),
-                                                  ),
-                                                ),
-                                          ),
-                                        ),
-                                      ),
-                                      SizedBox(height: 8 * scale),
-                                      Text(
-                                        '${(_scratchProgress * 100).toInt()}%',
-                                        style: TextStyle(
-                                          fontSize: 14 * scale,
-                                          fontWeight: FontWeight.bold,
-                                          color: onPrimary.withAlpha(
-                                            (0.8 * 255).round(),
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
+                              ScratchOverlay(
+                                isScratching: _isScratching,
+                                isRevealed: _isRevealed,
+                                scratchProgress: _scratchProgress,
+                                scale: scale,
+                                cardWidth: cardWidth,
                               ),
                             ],
                           ),
@@ -378,65 +245,4 @@ class _ScratchCardState extends State<ScratchCard>
       ),
     );
   }
-}
-
-class _ScratchPainter extends CustomPainter {
-  final List<Offset> scratchedPoints;
-  final double strokeWidth;
-  final double circleRadius;
-
-  _ScratchPainter(
-    this.scratchedPoints, {
-    this.strokeWidth = 45.0,
-    this.circleRadius = 22.5,
-  });
-
-  @override
-  void paint(Canvas canvas, Size size) {
-    final paint = Paint()
-      ..color = AppColors.transparent
-      ..blendMode = ui.BlendMode.clear
-      ..strokeCap = StrokeCap.round
-      ..strokeJoin = StrokeJoin.round
-      ..strokeWidth = strokeWidth;
-
-    for (int i = 0; i < scratchedPoints.length - 1; i++) {
-      final current = scratchedPoints[i];
-      final next = scratchedPoints[i + 1];
-
-      if (!current.isInfinite && !next.isInfinite) {
-        // Dibujar línea
-        canvas.drawLine(current, next, paint);
-        // Dibujar círculo en cada punto para mejor cobertura
-        canvas.drawCircle(current, circleRadius, paint);
-      }
-    }
-  }
-
-  @override
-  bool shouldRepaint(_ScratchPainter oldDelegate) => true;
-}
-
-class _TexturePainter extends CustomPainter {
-  final double scale;
-  final Color dotColor;
-
-  _TexturePainter(this.scale, this.dotColor);
-
-  @override
-  void paint(Canvas canvas, Size size) {
-    final paint = Paint()
-      ..color = dotColor
-      ..style = PaintingStyle.fill;
-
-    final random = math.Random(42);
-    for (int i = 0; i < 150; i++) {
-      final x = random.nextDouble() * size.width;
-      final y = random.nextDouble() * size.height;
-      canvas.drawCircle(Offset(x, y), random.nextDouble() * 1.5 * scale, paint);
-    }
-  }
-
-  @override
-  bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
 }

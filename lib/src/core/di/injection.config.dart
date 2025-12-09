@@ -81,6 +81,9 @@ import '../network/network_module.dart' as _i200;
 import '../services/business_hours.service.dart' as _i448;
 import '../services/local_storage_service.dart' as _i527;
 
+const String _dev = 'dev';
+const String _prod = 'prod';
+
 extension GetItInjectableX on _i174.GetIt {
   // initializes the registration of main-scope dependencies inside of GetIt
   Future<_i174.GetIt> init({
@@ -98,22 +101,24 @@ extension GetItInjectableX on _i174.GetIt {
     gh.lazySingleton<_i448.BusinessHoursService>(
       () => _i448.BusinessHoursService(),
     );
-    gh.lazySingleton<_i107.AuthRemoteDataSource>(
-      () => _i107.AuthRemoteDataSourceImpl(),
-    );
     gh.lazySingleton<_i823.ProductLocalDataSource>(
       () => _i823.ProductLocalDataSourceImpl(),
     );
     gh.lazySingleton<_i63.CouponLocalDataSource>(
       () => _i63.CouponLocalDataSourceImpl(),
     );
-    gh.lazySingleton<_i901.OrderHistoryRepository>(
-      () => _i962.MockOrderHistoryRepository(),
+    gh.lazySingleton<_i107.AuthRemoteDataSource>(
+      () => _i107.MockAuthDataSource(),
+      registerFor: {_dev},
     );
     gh.lazySingleton<_i527.LocalStorageService>(
       () => _i527.LocalStorageServiceImpl(gh<_i460.SharedPreferences>()),
     );
     gh.lazySingleton<_i667.DioClient>(() => _i667.DioClient(gh<_i361.Dio>()));
+    gh.lazySingleton<_i901.OrderHistoryRepository>(
+      () => _i962.MockOrderHistoryRepository(),
+      registerFor: {_dev},
+    );
     gh.lazySingleton<_i706.CartLocalDataSource>(
       () => _i706.CartLocalDataSourceImpl(gh<_i527.LocalStorageService>()),
     );
@@ -122,6 +127,10 @@ extension GetItInjectableX on _i174.GetIt {
     );
     gh.lazySingleton<_i322.CartRepository>(
       () => _i642.CartRepositoryImpl(gh<_i706.CartLocalDataSource>()),
+    );
+    gh.lazySingleton<_i901.OrderHistoryRepository>(
+      () => _i962.RealOrderHistoryRepository(),
+      registerFor: {_prod},
     );
     gh.lazySingleton<_i240.ClearCartUseCase>(
       () => _i240.ClearCartUseCase(gh<_i322.CartRepository>()),
@@ -132,17 +141,26 @@ extension GetItInjectableX on _i174.GetIt {
     gh.lazySingleton<_i903.SaveCartUseCase>(
       () => _i903.SaveCartUseCase(gh<_i322.CartRepository>()),
     );
+    gh.lazySingleton<_i107.AuthRemoteDataSource>(
+      () => _i107.RealAuthDataSource(),
+      registerFor: {_prod},
+    );
     gh.factory<_i821.BusinessStatusCubit>(
       () => _i821.BusinessStatusCubit(gh<_i448.BusinessHoursService>()),
     );
     gh.lazySingleton<_i166.ProductRemoteDataSource>(
-      () => _i166.ProductRemoteDataSourceImpl(gh<_i667.DioClient>()),
+      () => _i166.MockProductDataSource(gh<_i667.DioClient>()),
+      registerFor: {_dev},
     );
     gh.lazySingleton<_i787.AuthRepository>(
       () => _i153.AuthRepositoryImpl(
         gh<_i527.LocalStorageService>(),
         gh<_i107.AuthRemoteDataSource>(),
       ),
+    );
+    gh.lazySingleton<_i166.ProductRemoteDataSource>(
+      () => _i166.RealProductDataSource(gh<_i667.DioClient>()),
+      registerFor: {_prod},
     );
     gh.lazySingleton<_i664.CouponRepository>(
       () => _i346.CouponRepositoryImpl(gh<_i527.LocalStorageService>()),

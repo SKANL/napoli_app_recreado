@@ -2,7 +2,7 @@ import 'package:injectable/injectable.dart';
 import 'package:napoli_app_v1/src/features/settings/domain/entities/order_history.dart';
 import 'package:napoli_app_v1/src/features/settings/domain/repositories/order_history_repository.dart';
 
-@LazySingleton(as: OrderHistoryRepository)
+@LazySingleton(as: OrderHistoryRepository, env: ['dev'])
 class MockOrderHistoryRepository implements OrderHistoryRepository {
   final List<OrderHistory> _orders = [];
 
@@ -118,5 +118,20 @@ class MockOrderHistoryRepository implements OrderHistoryRepository {
         rating: 5,
       ),
     ];
+  }
+}
+
+@LazySingleton(as: OrderHistoryRepository, env: ['prod'])
+class RealOrderHistoryRepository implements OrderHistoryRepository {
+  @override
+  List<OrderHistory> getOrders() {
+    // TODO: implement getOrders with real API
+    throw UnimplementedError();
+  }
+
+  @override
+  void updateOrderRating(String orderId, int rating) {
+    // TODO: implement updateOrderRating with real API
+    throw UnimplementedError();
   }
 }
