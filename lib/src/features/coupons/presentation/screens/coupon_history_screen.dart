@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:napoli_app_v1/l10n/arb/app_localizations.dart';
 import 'package:intl/intl.dart';
-import '../../../../core/services/coupon_history.service.dart';
+import 'package:napoli_app_v1/src/di.dart';
+import '../../domain/repositories/coupon_repository.dart';
+import '../../domain/entities/coupon.dart';
 
 class CouponHistoryScreen extends StatefulWidget {
   const CouponHistoryScreen({super.key});
@@ -11,8 +13,8 @@ class CouponHistoryScreen extends StatefulWidget {
 }
 
 class _CouponHistoryScreenState extends State<CouponHistoryScreen> {
-  final CouponHistoryService _historyService = CouponHistoryService();
-  List<Map<String, dynamic>> _coupons = [];
+  final CouponRepository _repository = getIt<CouponRepository>();
+  List<Coupon> _coupons = [];
   bool _isLoading = true;
 
   @override
@@ -23,11 +25,22 @@ class _CouponHistoryScreenState extends State<CouponHistoryScreen> {
 
   Future<void> _loadCoupons() async {
     setState(() => _isLoading = true);
-    final coupons = await _historyService.getCoupons();
-    setState(() {
-      _coupons = coupons.reversed.toList(); // Más recientes primero
-      _isLoading = false;
-    });
+    final result = await _repository.getCoupons();
+
+    result.fold(
+      (failure) {
+        setState(() => _isLoading = false);
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text('Error: ${failure.message}')));
+      },
+      (coupons) {
+        setState(() {
+          _coupons = coupons.reversed.toList(); // Más recientes primero
+          _isLoading = false;
+        });
+      },
+    );
   }
 
   Future<void> _clearHistory() async {
@@ -54,7 +67,7 @@ class _CouponHistoryScreenState extends State<CouponHistoryScreen> {
     );
 
     if (confirmed == true && mounted) {
-      await _historyService.clearHistory();
+      await _repository.clearHistory();
       _loadCoupons();
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -183,8 +196,8 @@ class _CouponHistoryScreenState extends State<CouponHistoryScreen> {
             itemCount: _coupons.length,
             itemBuilder: (context, index) {
               final coupon = _coupons[index];
-              final code = coupon['code'] as String;
-              final timestamp = coupon['timestamp'] as DateTime;
+              final code = coupon.code;
+              final timestamp = coupon.receivedDate ?? DateTime.now();
 
               return Card(
                 margin: const EdgeInsets.only(bottom: 12),

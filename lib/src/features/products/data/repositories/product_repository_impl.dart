@@ -4,11 +4,11 @@ import 'package:collection/collection.dart';
 import '../../../../core/error/failures.dart';
 import '../../../../core/core_domain/entities/product.dart';
 import '../../../../core/core_domain/repositories/product_repository.dart';
-import '../datasources/product_local_data_source.dart';
+import '../datasources/product_remote_data_source.dart';
 
 @LazySingleton(as: ProductRepository)
 class ProductRepositoryImpl implements ProductRepository {
-  final ProductLocalDataSource _dataSource;
+  final ProductRemoteDataSource _dataSource;
 
   ProductRepositoryImpl(this._dataSource);
 

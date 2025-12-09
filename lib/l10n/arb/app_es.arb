@@ -484,5 +484,6 @@
     "activeStatus": "Activo",
     "mapViewTitle": "Vista de Mapa",
     "mapsDisabled": "(Integración de Google Maps deshabilitada)",
-    "mockAddress": "Ubicación Actual, 12345\nNombre de Calle, Ciudad"
+    "mockAddress": "Ubicación Actual, 12345\nNombre de Calle, Ciudad",
+    "errorTitle": "Error"
 }

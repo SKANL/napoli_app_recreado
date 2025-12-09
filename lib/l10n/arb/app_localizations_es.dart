@@ -1063,4 +1063,7 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get mockAddress => 'Ubicación Actual, 12345\nNombre de Calle, Ciudad';
+
+  @override
+  String get errorTitle => 'Error';
 }

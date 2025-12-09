@@ -1,5 +1,7 @@
 import 'package:injectable/injectable.dart';
 import 'package:napoli_app_v1/src/features/auth/data/models/user_model.dart';
+import 'package:napoli_app_v1/src/features/settings/domain/entities/address_model.dart';
+import 'package:napoli_app_v1/src/features/settings/domain/entities/payment_method.dart';
 
 abstract class AuthRemoteDataSource {
   Future<UserModel> login(String email, String password);
@@ -22,6 +24,44 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
         email: email,
         phone: '+52 55 1234 5678',
         address: 'Calle Falsa 123',
+        savedAddresses: [
+          AddressModel(
+            id: '1',
+            label: 'Casa',
+            address: 'Calle Principal 123, Col. Centro',
+            city: 'Ciudad de México',
+            details: 'Casa blanca con portón negro',
+            isDefault: true,
+          ),
+          AddressModel(
+            id: '2',
+            label: 'Trabajo',
+            address: 'Av. Reforma 456, Piso 8',
+            city: 'Ciudad de México',
+            details: 'Oficina 804, Torre B',
+            isDefault: false,
+          ),
+        ],
+        savedCards: [
+          PaymentMethodModel(
+            id: '1',
+            type: PaymentType.card,
+            cardNumber: '**** **** **** 1234',
+            cardHolder: 'JUAN PEREZ',
+            expiryDate: '12/28',
+            cardBrand: 'Visa',
+            isDefault: true,
+          ),
+          PaymentMethodModel(
+            id: '2',
+            type: PaymentType.card,
+            cardNumber: '**** **** **** 5678',
+            cardHolder: 'JUAN PEREZ',
+            expiryDate: '03/27',
+            cardBrand: 'Mastercard',
+            isDefault: false,
+          ),
+        ],
       );
     } else {
       throw Exception('Credenciales inválidas');

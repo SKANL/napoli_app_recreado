@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:napoli_app_v1/src/features/settings/presentation/screens/payment_methods_screen.dart';
+import 'package:napoli_app_v1/src/features/settings/domain/entities/payment_method.dart';
 
 class PaymentMethodSelector extends StatelessWidget {
   final String selectedPaymentMethod;

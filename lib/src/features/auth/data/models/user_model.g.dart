@@ -13,6 +13,16 @@ UserModel _$UserModelFromJson(Map<String, dynamic> json) => UserModel(
   phone: json['phone'] as String?,
   address: json['address'] as String?,
   photoUrl: json['photoUrl'] as String?,
+  savedAddresses:
+      (json['savedAddresses'] as List<dynamic>?)
+          ?.map((e) => AddressModel.fromJson(e as Map<String, dynamic>))
+          .toList() ??
+      const [],
+  savedCards:
+      (json['savedCards'] as List<dynamic>?)
+          ?.map((e) => PaymentMethodModel.fromJson(e as Map<String, dynamic>))
+          .toList() ??
+      const [],
 );
 
 Map<String, dynamic> _$UserModelToJson(UserModel instance) => <String, dynamic>{
@@ -22,4 +32,6 @@ Map<String, dynamic> _$UserModelToJson(UserModel instance) => <String, dynamic>{
   'phone': instance.phone,
   'address': instance.address,
   'photoUrl': instance.photoUrl,
+  'savedAddresses': instance.savedAddresses,
+  'savedCards': instance.savedCards,
 };

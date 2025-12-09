@@ -2041,6 +2041,12 @@ abstract class AppLocalizations {
   /// In es, this message translates to:
   /// **'Ubicación Actual, 12345\nNombre de Calle, Ciudad'**
   String get mockAddress;
+
+  /// No description provided for @errorTitle.
+  ///
+  /// In es, this message translates to:
+  /// **'Error'**
+  String get errorTitle;
 }
 
 class _AppLocalizationsDelegate

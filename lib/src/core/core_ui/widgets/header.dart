@@ -3,7 +3,8 @@ import 'dart:math';
 import 'theme_toggle.dart';
 import 'scratch_card.dart';
 
-import '../../services/coupon_history.service.dart';
+import 'package:napoli_app_v1/src/di.dart';
+import '../../../features/coupons/domain/repositories/coupon_repository.dart';
 import '../../../features/coupons/presentation/screens/coupon_history_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:napoli_app_v1/src/features/auth/presentation/screens/login_screen.dart';
@@ -78,7 +79,7 @@ class AppHeader extends StatelessWidget {
     final coupons = ['PIZZA10', 'SAVE20', 'MEGA50'];
     final random = Random();
     final wonCoupon = coupons[random.nextInt(coupons.length)];
-    final historyService = CouponHistoryService();
+    final repository = getIt<CouponRepository>();
     bool revealed = false;
 
     showDialog(
@@ -103,7 +104,7 @@ class AppHeader extends StatelessWidget {
                 onRevealed: () async {
                   setState(() => revealed = true);
                   // Guardar cupón en historial
-                  await historyService.saveCoupon(wonCoupon);
+                  await repository.saveCoupon(wonCoupon);
                 },
               ),
               if (revealed) ...[

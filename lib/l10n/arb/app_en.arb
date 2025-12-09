@@ -484,5 +484,6 @@
     "activeStatus": "Active",
     "mapViewTitle": "Map View",
     "mapsDisabled": "(Google Maps integration disabled)",
-    "mockAddress": "Current Location, 12345\nStreet Name, City"
+    "mockAddress": "Current Location, 12345\nStreet Name, City",
+    "errorTitle": "Error"
 }

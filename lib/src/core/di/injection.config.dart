@@ -9,6 +9,7 @@
 // coverage:ignore-file
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
+import 'package:dio/dio.dart' as _i361;
 import 'package:get_it/get_it.dart' as _i174;
 import 'package:injectable/injectable.dart' as _i526;
 import 'package:shared_preferences/shared_preferences.dart' as _i460;
@@ -56,6 +57,8 @@ import '../../features/orders/domain/usecases/save_order_usecase.dart' as _i56;
 import '../../features/orders/presentation/cubit/orders_cubit.dart' as _i1028;
 import '../../features/products/data/datasources/product_local_data_source.dart'
     as _i823;
+import '../../features/products/data/datasources/product_remote_data_source.dart'
+    as _i166;
 import '../../features/products/data/repositories/product_repository_impl.dart'
     as _i764;
 import '../../features/products/domain/usecases/get_business_lunch_usecase.dart'
@@ -68,7 +71,13 @@ import '../../features/products/presentation/cubit/product_detail_cubit.dart'
     as _i582;
 import '../../features/products/presentation/cubit/products_cubit.dart'
     as _i911;
+import '../../features/settings/data/repositories/mock_order_history_repository.dart'
+    as _i962;
+import '../../features/settings/domain/repositories/order_history_repository.dart'
+    as _i901;
 import '../core_domain/repositories/product_repository.dart' as _i1009;
+import '../network/dio_client.dart' as _i667;
+import '../network/network_module.dart' as _i200;
 import '../services/business_hours.service.dart' as _i448;
 import '../services/local_storage_service.dart' as _i527;
 
@@ -80,10 +89,12 @@ extension GetItInjectableX on _i174.GetIt {
   }) async {
     final gh = _i526.GetItHelper(this, environment, environmentFilter);
     final registerModule = _$RegisterModule();
+    final networkModule = _$NetworkModule();
     await gh.factoryAsync<_i460.SharedPreferences>(
       () => registerModule.prefs,
       preResolve: true,
     );
+    gh.lazySingleton<_i361.Dio>(() => networkModule.dio);
     gh.lazySingleton<_i448.BusinessHoursService>(
       () => _i448.BusinessHoursService(),
     );
@@ -96,15 +107,13 @@ extension GetItInjectableX on _i174.GetIt {
     gh.lazySingleton<_i63.CouponLocalDataSource>(
       () => _i63.CouponLocalDataSourceImpl(),
     );
-    gh.lazySingleton<_i664.CouponRepository>(
-      () => _i346.CouponRepositoryImpl(gh<_i63.CouponLocalDataSource>()),
-    );
-    gh.lazySingleton<_i1009.ProductRepository>(
-      () => _i764.ProductRepositoryImpl(gh<_i823.ProductLocalDataSource>()),
+    gh.lazySingleton<_i901.OrderHistoryRepository>(
+      () => _i962.MockOrderHistoryRepository(),
     );
     gh.lazySingleton<_i527.LocalStorageService>(
       () => _i527.LocalStorageServiceImpl(gh<_i460.SharedPreferences>()),
     );
+    gh.lazySingleton<_i667.DioClient>(() => _i667.DioClient(gh<_i361.Dio>()));
     gh.lazySingleton<_i706.CartLocalDataSource>(
       () => _i706.CartLocalDataSourceImpl(gh<_i527.LocalStorageService>()),
     );
@@ -126,8 +135,8 @@ extension GetItInjectableX on _i174.GetIt {
     gh.factory<_i821.BusinessStatusCubit>(
       () => _i821.BusinessStatusCubit(gh<_i448.BusinessHoursService>()),
     );
-    gh.lazySingleton<_i621.GetCouponUseCase>(
-      () => _i621.GetCouponUseCase(gh<_i664.CouponRepository>()),
+    gh.lazySingleton<_i166.ProductRemoteDataSource>(
+      () => _i166.ProductRemoteDataSourceImpl(gh<_i667.DioClient>()),
     );
     gh.lazySingleton<_i787.AuthRepository>(
       () => _i153.AuthRepositoryImpl(
@@ -135,22 +144,8 @@ extension GetItInjectableX on _i174.GetIt {
         gh<_i107.AuthRemoteDataSource>(),
       ),
     );
-    gh.lazySingleton<_i499.CartCubit>(
-      () => _i499.CartCubit(
-        gh<_i179.GetCartUseCase>(),
-        gh<_i903.SaveCartUseCase>(),
-        gh<_i240.ClearCartUseCase>(),
-        gh<_i621.GetCouponUseCase>(),
-      ),
-    );
-    gh.lazySingleton<_i887.GetBusinessLunchUseCase>(
-      () => _i887.GetBusinessLunchUseCase(gh<_i1009.ProductRepository>()),
-    );
-    gh.lazySingleton<_i639.GetProductDetailUseCase>(
-      () => _i639.GetProductDetailUseCase(gh<_i1009.ProductRepository>()),
-    );
-    gh.lazySingleton<_i15.GetProductsUseCase>(
-      () => _i15.GetProductsUseCase(gh<_i1009.ProductRepository>()),
+    gh.lazySingleton<_i664.CouponRepository>(
+      () => _i346.CouponRepositoryImpl(gh<_i527.LocalStorageService>()),
     );
     gh.lazySingleton<_i17.GetCurrentUserUseCase>(
       () => _i17.GetCurrentUserUseCase(gh<_i787.AuthRepository>()),
@@ -170,8 +165,11 @@ extension GetItInjectableX on _i174.GetIt {
     gh.lazySingleton<_i543.OrderRepository>(
       () => _i376.OrderRepositoryImpl(gh<_i85.OrderLocalDataSource>()),
     );
-    gh.factory<_i582.ProductDetailCubit>(
-      () => _i582.ProductDetailCubit(gh<_i639.GetProductDetailUseCase>()),
+    gh.lazySingleton<_i621.GetCouponUseCase>(
+      () => _i621.GetCouponUseCase(gh<_i664.CouponRepository>()),
+    );
+    gh.lazySingleton<_i1009.ProductRepository>(
+      () => _i764.ProductRepositoryImpl(gh<_i166.ProductRemoteDataSource>()),
     );
     gh.lazySingleton<_i117.AuthCubit>(
       () => _i117.AuthCubit(
@@ -182,11 +180,12 @@ extension GetItInjectableX on _i174.GetIt {
         gh<_i798.UpdateProfileUseCase>(),
       ),
     );
-    gh.lazySingleton<_i911.ProductsCubit>(
-      () => _i911.ProductsCubit(
-        gh<_i15.GetProductsUseCase>(),
-        gh<_i639.GetProductDetailUseCase>(),
-        gh<_i887.GetBusinessLunchUseCase>(),
+    gh.lazySingleton<_i499.CartCubit>(
+      () => _i499.CartCubit(
+        gh<_i179.GetCartUseCase>(),
+        gh<_i903.SaveCartUseCase>(),
+        gh<_i240.ClearCartUseCase>(),
+        gh<_i621.GetCouponUseCase>(),
       ),
     );
     gh.lazySingleton<_i755.GetOrdersUseCase>(
@@ -195,10 +194,29 @@ extension GetItInjectableX on _i174.GetIt {
     gh.lazySingleton<_i56.SaveOrderUseCase>(
       () => _i56.SaveOrderUseCase(gh<_i543.OrderRepository>()),
     );
+    gh.lazySingleton<_i887.GetBusinessLunchUseCase>(
+      () => _i887.GetBusinessLunchUseCase(gh<_i1009.ProductRepository>()),
+    );
+    gh.lazySingleton<_i639.GetProductDetailUseCase>(
+      () => _i639.GetProductDetailUseCase(gh<_i1009.ProductRepository>()),
+    );
+    gh.lazySingleton<_i15.GetProductsUseCase>(
+      () => _i15.GetProductsUseCase(gh<_i1009.ProductRepository>()),
+    );
     gh.factory<_i1028.OrdersCubit>(
       () => _i1028.OrdersCubit(
         gh<_i56.SaveOrderUseCase>(),
         gh<_i755.GetOrdersUseCase>(),
+      ),
+    );
+    gh.factory<_i582.ProductDetailCubit>(
+      () => _i582.ProductDetailCubit(gh<_i639.GetProductDetailUseCase>()),
+    );
+    gh.lazySingleton<_i911.ProductsCubit>(
+      () => _i911.ProductsCubit(
+        gh<_i15.GetProductsUseCase>(),
+        gh<_i639.GetProductDetailUseCase>(),
+        gh<_i887.GetBusinessLunchUseCase>(),
       ),
     );
     return this;
@@ -206,3 +224,5 @@ extension GetItInjectableX on _i174.GetIt {
 }
 
 class _$RegisterModule extends _i527.RegisterModule {}
+
+class _$NetworkModule extends _i200.NetworkModule {}

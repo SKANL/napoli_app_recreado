@@ -8,6 +8,8 @@ abstract class LocalStorageService {
   bool? getBool(String key);
   Future<void> remove(String key);
   Future<void> clear();
+  Future<void> setStringList(String key, List<String> value);
+  List<String>? getStringList(String key);
 }
 
 @LazySingleton(as: LocalStorageService)
@@ -34,6 +36,13 @@ class LocalStorageServiceImpl implements LocalStorageService {
 
   @override
   Future<void> clear() => _prefs.clear();
+
+  @override
+  Future<void> setStringList(String key, List<String> value) =>
+      _prefs.setStringList(key, value);
+
+  @override
+  List<String>? getStringList(String key) => _prefs.getStringList(key);
 }
 
 @module

@@ -1,17 +1,19 @@
-import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:napoli_app_v1/l10n/arb/app_localizations.dart';
-import 'package:napoli_app_v1/src/di.dart';
 import 'package:napoli_app_v1/src/core/core_ui/theme.dart';
 import 'package:napoli_app_v1/src/core/core_ui/widgets/app_scaffold.dart';
-import 'package:napoli_app_v1/src/core/core_ui/widgets/pressable_scale.dart';
+import 'package:napoli_app_v1/src/di.dart';
+import 'package:napoli_app_v1/src/features/auth/presentation/widgets/auth_footer.dart';
+import 'package:napoli_app_v1/src/features/auth/presentation/widgets/auth_tab_selector.dart';
+import 'package:napoli_app_v1/src/features/auth/presentation/widgets/login_logo.dart';
+import 'package:napoli_app_v1/src/features/auth/presentation/widgets/social_login_buttons.dart';
 import '../../presentation/cubit/auth_cubit.dart';
 import '../../presentation/cubit/auth_state.dart';
+import '../widgets/login_background_painter.dart';
 import '../widgets/login_form.dart';
 import '../widgets/register_form.dart';
-import '../widgets/login_background_painter.dart';
 
 /// Login screen adapted from the design references in `ideas-diseno`.
 /// This implementation follows the project's architecture and uses
@@ -106,56 +108,8 @@ class _LoginScreenState extends State<_LoginScreenContent>
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  // Logo with subtle floating + rotation animation (gives a lively, artisanal feel)
-                  AnimatedBuilder(
-                    animation: _bgAnimation,
-                    builder: (context, child) {
-                      final dy =
-                          (0.5 - _bgAnimation.value) *
-                          8; // slightly larger float
-                      final angle =
-                          math.sin(_bgAnimation.value * math.pi * 2) *
-                          0.04; // small rotation
-                      return Transform.translate(
-                        offset: Offset(0, dy),
-                        child: Transform.rotate(angle: angle, child: child),
-                      );
-                    },
-                    child: Container(
-                      width: 110,
-                      height: 110,
-                      decoration: BoxDecoration(
-                        color: AppColors.white,
-                        borderRadius: BorderRadius.circular(20),
-                        boxShadow: [
-                          BoxShadow(
-                            color: colorScheme.secondary.withAlpha(
-                              (0.25 * 255).round(),
-                            ),
-                            blurRadius: 12,
-                            spreadRadius: 1,
-                            offset: const Offset(0, 6),
-                          ),
-                        ],
-                        border: Border.all(
-                          color: AppColors.primaryRed.withAlpha(
-                            (0.6 * 255).round(),
-                          ),
-                          width: 2,
-                        ),
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.all(12.0),
-                        child: Image.asset(
-                          'assets/images/logo_fondo_blanco-transpa.png',
-                          fit: BoxFit.contain,
-                          // constrain the image so it visually matches the previous icon size
-                          width: 56,
-                          height: 56,
-                        ),
-                      ),
-                    ),
-                  ),
+                  // Logo with subtle floating + rotation animation
+                  LoginLogo(animation: _bgAnimation),
                   const SizedBox(height: 18),
                   Text(
                     l10n.welcomeTo,
@@ -176,9 +130,7 @@ class _LoginScreenState extends State<_LoginScreenContent>
                     height: 4,
                     width: 120,
                     decoration: BoxDecoration(
-                      color: AppColors.primaryRed.withAlpha(
-                        (0.06 * 255).round(),
-                      ),
+                      color: AppColors.primaryRed.withValues(alpha: 0.06),
                       borderRadius: BorderRadius.circular(4),
                     ),
                   ),
@@ -212,9 +164,7 @@ class _LoginScreenState extends State<_LoginScreenContent>
                         borderRadius: BorderRadius.circular(14),
                         boxShadow: [
                           BoxShadow(
-                            color: theme.shadowColor.withAlpha(
-                              (0.08 * 255).round(),
-                            ),
+                            color: theme.shadowColor.withValues(alpha: 0.08),
                             blurRadius: 8,
                             offset: const Offset(0, 6),
                           ),
@@ -224,78 +174,10 @@ class _LoginScreenState extends State<_LoginScreenContent>
                       child: Column(
                         children: [
                           // Tabs
-                          Row(
-                            children: [
-                              Expanded(
-                                child: GestureDetector(
-                                  onTap: () => setState(() => _isSignIn = true),
-                                  child: Column(
-                                    children: [
-                                      Text(
-                                        l10n.signInTab,
-                                        style: theme.textTheme.titleMedium
-                                            ?.copyWith(
-                                              color: _isSignIn
-                                                  ? colorScheme.primary
-                                                  : colorScheme.onSurface
-                                                        .withAlpha(
-                                                          (0.6 * 255).round(),
-                                                        ),
-                                              fontWeight: FontWeight.w800,
-                                            ),
-                                      ),
-                                      const SizedBox(height: 8),
-                                      if (_isSignIn)
-                                        Container(
-                                          height: 3,
-                                          width: 48,
-                                          decoration: BoxDecoration(
-                                            color: colorScheme.primary,
-                                            borderRadius: BorderRadius.circular(
-                                              2,
-                                            ),
-                                          ),
-                                        ),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                              Expanded(
-                                child: GestureDetector(
-                                  onTap: () =>
-                                      setState(() => _isSignIn = false),
-                                  child: Column(
-                                    children: [
-                                      Text(
-                                        l10n.signUpTab,
-                                        style: theme.textTheme.titleMedium
-                                            ?.copyWith(
-                                              color: !_isSignIn
-                                                  ? colorScheme.primary
-                                                  : colorScheme.onSurface
-                                                        .withAlpha(
-                                                          (0.6 * 255).round(),
-                                                        ),
-                                              fontWeight: FontWeight.w800,
-                                            ),
-                                      ),
-                                      const SizedBox(height: 8),
-                                      if (!_isSignIn)
-                                        Container(
-                                          height: 3,
-                                          width: 48,
-                                          decoration: BoxDecoration(
-                                            color: colorScheme.primary,
-                                            borderRadius: BorderRadius.circular(
-                                              2,
-                                            ),
-                                          ),
-                                        ),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                            ],
+                          AuthTabSelector(
+                            isSignIn: _isSignIn,
+                            onTabSelected: (value) =>
+                                setState(() => _isSignIn = value),
                           ),
 
                           const SizedBox(height: 18),
@@ -311,61 +193,14 @@ class _LoginScreenState extends State<_LoginScreenContent>
                           const SizedBox(height: 16),
 
                           // Social strip
-                          Column(
-                            children: [
-                              Text(
-                                l10n.orLoginWith,
-                                style: theme.textTheme.bodySmall,
-                              ),
-                              const SizedBox(height: 8),
-                              Row(
-                                children: [
-                                  Expanded(
-                                    child: _socialButtonColored(
-                                      context,
-                                      Icons.email_outlined,
-                                      'Google',
-                                      AppColors.primaryGreen,
-                                    ),
-                                  ),
-                                  const SizedBox(width: 8),
-                                  Expanded(
-                                    child: _socialButtonColored(
-                                      context,
-                                      Icons.facebook_outlined,
-                                      'Facebook',
-                                      AppColors.primaryRed,
-                                    ),
-                                  ),
-                                  const SizedBox(width: 8),
-                                  Expanded(
-                                    child: _socialButtonColored(
-                                      context,
-                                      Icons.apple,
-                                      'Apple',
-                                      AppColors.textDark,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ],
-                          ),
+                          const SocialLoginButtons(),
 
                           const SizedBox(height: 12),
 
                           // Footer link
-                          GestureDetector(
+                          AuthFooter(
+                            isSignIn: _isSignIn,
                             onTap: () => setState(() => _isSignIn = !_isSignIn),
-                            child: Text(
-                              _isSignIn
-                                  ? '${l10n.dontHaveAccount} ${l10n.registerAction}'
-                                  : '${l10n.alreadyHaveAccount} ${l10n.loginAction}',
-                              style: theme.textTheme.bodyMedium?.copyWith(
-                                color: colorScheme.onSurface.withAlpha(
-                                  (0.8 * 255).round(),
-                                ),
-                              ),
-                            ),
                           ),
                         ],
                       ),
@@ -376,38 +211,6 @@ class _LoginScreenState extends State<_LoginScreenContent>
             ),
           ),
         ],
-      ),
-    );
-  }
-
-  Widget _socialButtonColored(
-    BuildContext context,
-    IconData icon,
-    String label,
-    Color bgColor,
-  ) {
-    return PressableScale(
-      child: ElevatedButton(
-        style: ElevatedButton.styleFrom(
-          backgroundColor: bgColor,
-          foregroundColor: AppColors.white,
-          padding: const EdgeInsets.symmetric(vertical: 12),
-          elevation: 2,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(10),
-          ),
-        ),
-        onPressed: () => ScaffoldMessenger.of(
-          context,
-        ).showSnackBar(SnackBar(content: Text('$label login coming soon!'))),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(icon, size: 18),
-            const SizedBox(width: 8),
-            Flexible(child: Text(label, overflow: TextOverflow.ellipsis)),
-          ],
-        ),
       ),
     );
   }
